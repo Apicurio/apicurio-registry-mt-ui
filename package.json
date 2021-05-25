@@ -1,0 +1,44 @@
+{
+  "name": "apicurio-registry-mt-ui",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@patternfly/react-core": "4.121.1",
+    "@patternfly/react-icons": "4.10.7",
+    "@types/node": "12.12.6",
+    "@types/react": "17.0.7",
+    "@types/react-dom": "17.0.5",
+    "@types/react-router": "5.1.14",
+    "@types/react-router-dom": "5.1.7",
+    "axios": "0.21.1",
+    "keycloak-js": "13.0.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-moment": "1.1.1",
+    "react-router": "5.2.0",
+    "react-router-dom": "5.2.0",
+    "react-scripts": "4.0.3",
+    "typescript": "4.2.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
