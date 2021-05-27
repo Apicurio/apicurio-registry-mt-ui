@@ -38,8 +38,8 @@ export class ConfigService implements Service {
 
     constructor() {
         const w: any = window;
-        if (w.ApicurioRegistryTsUiConfig) {
-            this.config = w.ApicurioRegistryTsUiConfig;
+        if (w.ApicurioRegistryMtUiConfig) {
+            this.config = w.ApicurioRegistryMtUiConfig;
             console.info("[ConfigService] Found app config.");
         } else {
             console.error("[ConfigService] App config not found! (using default)");
