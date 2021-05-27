@@ -42,9 +42,16 @@ export abstract class BaseService implements Service {
     protected config: ConfigService = null;
     // @ts-ignore
     protected auth: AuthService = null;
-    private apiBaseHref: string = "/";
+    // @ts-ignore
+    private apiBaseHref: string;
 
     public init(): void {
+        this.apiBaseHref = this.config.tenantsApi();
+        if (this.apiBaseHref.endsWith("/")) {
+            this.apiBaseHref = this.apiBaseHref.substring(0, this.apiBaseHref.length - 1);
+        }
+        this.logger.debug("[BaseService] Base HREF of Tenant Manager REST API: ", this.apiBaseHref);
+
         this.initAuthInterceptor();
     }
 

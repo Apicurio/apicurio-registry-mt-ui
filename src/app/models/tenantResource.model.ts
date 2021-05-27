@@ -15,17 +15,9 @@
  * limitations under the License.
  */
 
+export interface TenantResource {
 
-export interface AuthConfig {
+    limit: number;
     type: string;
-    options: any;
-}
 
-export interface TenantsConfig {
-    api: string;
-}
-
-export interface ConfigType {
-    auth: AuthConfig;
-    tenants: TenantsConfig;
 }

@@ -18,6 +18,7 @@ import {ConfigService} from "./config";
 import {LoggerService} from "./logger";
 import {Service} from "./baseService";
 import {AuthService} from "./auth";
+import {TenantsService} from "./tenants";
 
 /**
  * Class that provides access to all of the services in the application.
@@ -36,10 +37,15 @@ export class Services {
         return Services.all.auth;
     }
 
+    public static getTenantsService(): TenantsService {
+        return Services.all.tenants;
+    }
+
     private static all: any = {
         config: new ConfigService(),
         logger: new LoggerService(),
-        auth: new AuthService()
+        auth: new AuthService(),
+        tenants: new TenantsService()
     };
 
     // tslint:disable-next-line:member-ordering member-access

@@ -23,7 +23,10 @@ const DEFAULT_CONFIG: ConfigType = {
         options: {
         },
         type: "none"
-    }
+    },
+    tenants: {
+        api: "http://localhost:8585/api/v1"
+    },
 };
 
 /**
@@ -60,5 +63,12 @@ export class ConfigService implements Service {
             return "";
         }
         return this.config.auth.options;
+    }
+
+    public tenantsApi(): string {
+        if (!this.config.tenants || !this.config.tenants.api) {
+            return "";
+        }
+        return this.config.tenants.api;
     }
 }

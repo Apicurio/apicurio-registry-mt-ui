@@ -16,4 +16,4 @@
  */
 
 export * from "./basePage";
-export * from "./dashboard";
+export * from "./tenants";

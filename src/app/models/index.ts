@@ -15,17 +15,6 @@
  * limitations under the License.
  */
 
-
-export interface AuthConfig {
-    type: string;
-    options: any;
-}
-
-export interface TenantsConfig {
-    api: string;
-}
-
-export interface ConfigType {
-    auth: AuthConfig;
-    tenants: TenantsConfig;
-}
+export * from "./newRegistryTenantRequest.model";
+export * from "./resourceTypes";
+export * from "./tenantResource.model";

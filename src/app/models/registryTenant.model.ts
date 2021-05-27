@@ -14,5 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {TenantResource} from "./tenantResource.model";
 
-export * from "./dashboard";
+export interface RegistryTenant {
+
+    createdBy: string;
+    createdOn: string;
+    organizationId: string;
+    resources: TenantResource[];
+    tenantId: string;
+
+}

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@patternfly/react-core": "4.121.1",
+    "@patternfly/react-table": "4.27.7",
     "@patternfly/react-icons": "4.10.7",
     "@types/node": "12.12.6",
     "@types/react": "17.0.7",

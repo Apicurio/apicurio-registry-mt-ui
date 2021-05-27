@@ -19,7 +19,7 @@ import React from "react";
 import {Page} from "@patternfly/react-core";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {AppHeader} from "./components/header";
-import {DashboardPage} from "./pages";
+import {TenantsPage} from "./pages";
 import {Services} from "./services";
 
 
@@ -38,7 +38,7 @@ export default class App extends React.PureComponent<{}, {}> {
                     header={<AppHeader/>}
                 >
                     <Switch>
-                        <Route path='/' exact={true} component={DashboardPage}/>
+                        <Route path='/' exact={true} component={TenantsPage}/>
                     </Switch>
                 </Page>
             </Router>

@@ -14,18 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {TenantResource} from "./tenantResource.model";
 
+export interface NewRegistryTenantRequest {
 
-export interface AuthConfig {
-    type: string;
-    options: any;
-}
+    organizationId: string;
+    resources: TenantResource[];
+    tenantId: string;
 
-export interface TenantsConfig {
-    api: string;
-}
-
-export interface ConfigType {
-    auth: AuthConfig;
-    tenants: TenantsConfig;
 }
