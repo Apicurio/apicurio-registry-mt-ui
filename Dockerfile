@@ -1,7 +1,9 @@
-FROM nginx:1.13.9-alpine
+FROM nginx:1.21.0-alpine
 
 COPY build /usr/share/nginx/html
 
-EXPOSE 8080
+ADD docker-entrypoint.sh docker-entrypoint.sh
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 80
+
+CMD ["docker-entrypoint.sh"]
