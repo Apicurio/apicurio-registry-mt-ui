@@ -1,8 +1,10 @@
 FROM nginx:1.21.0-alpine
 
-COPY build /usr/share/nginx/html
+ENV TENANT_MANAGER_API http://localhost:8585
 
-ADD docker-entrypoint.sh docker-entrypoint.sh
+COPY build /usr/share/nginx/html
+COPY docker/config.template.js config.template.js
+COPY docker/docker-entrypoint.sh docker-entrypoint.sh
 
 EXPOSE 80
 
