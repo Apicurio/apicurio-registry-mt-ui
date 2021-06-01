@@ -18,7 +18,7 @@
 import React from 'react';
 import "./header.css"
 import {Brand, PageHeader} from '@patternfly/react-core';
-import brandImg from "../../../assets/images/apicurio_logo_darkbkg_350px.png";
+import brandImg from "./header-logo.png";
 import {PureComponent, PureComponentProps, PureComponentState} from "../baseComponent";
 
 
