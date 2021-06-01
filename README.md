@@ -44,6 +44,10 @@ below for details:
 |------|-------------|---------|
 | TENANT_MANAGER_API | URL of the Tenant Manager API. | http://localhost:8585/api/v1 |
 
+### Push the docker image
+If you've made changes to the docker image, you can push it to docker hub using e.g.:
+
+`docker push apicurio/apicurio-registry-mt-ui:latest`
 
 ## Learn More
 
