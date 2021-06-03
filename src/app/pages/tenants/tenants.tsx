@@ -38,7 +38,7 @@ import {Services} from "../../services";
 import {RegistryTenant} from "../../models/registryTenant.model";
 import {NewRegistryTenantRequest} from "../../models";
 import {TableComposable, Tbody, Td, Th, Thead, Tr} from '@patternfly/react-table';
-
+import {Link} from "react-router-dom";
 
 /**
  * Properties
@@ -112,7 +112,10 @@ export class TenantsPage extends PageComponent<TenantsPageProps, TenantsPageStat
                             <Tbody>
                                 {this.state.tenants.map((tenant, rowIndex) => (
                                     <Tr key={rowIndex}>
-                                        <Td key={rowIndex + '_id'} dataLabel={columns[0]}>{ tenant.tenantId }</Td>
+                                        <Td key={rowIndex + '_id'} dataLabel={columns[0]}>
+                                            <Link className="name"
+                                                  to={`/t/${ encodeURIComponent(tenant.tenantId)}`}>{tenant.tenantId}</Link>
+                                        </Td>
                                         <Td key={rowIndex + '_orgId'} dataLabel={columns[1]}>{ tenant.organizationId }</Td>
                                         <Td key={rowIndex + '_createdOn'} dataLabel={columns[2]}>{ tenant.createdOn }</Td>
                                     </Tr>
@@ -147,9 +150,5 @@ export class TenantsPage extends PageComponent<TenantsPageProps, TenantsPageStat
         Services.getTenantsService().createTenant(request).then(tenant => {
             this.setSingleState("tenants", [ ...this.state.tenants, tenant ]);
         });
-    };
-
-    private tenantRows = (): string[] => {
-        return [];
     };
 }
