@@ -42,7 +42,7 @@ export class ConfigService implements Service {
             this.config = w.ApicurioRegistryMtUiConfig;
             console.info("[ConfigService] Found app config.");
         } else {
-            console.error("[ConfigService] App config not found! (using default)");
+            console.warn("[ConfigService] App config not found! (using default)");
             this.config = DEFAULT_CONFIG;
         }
     }

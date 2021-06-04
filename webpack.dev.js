@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
 const {dependencies} = require("./package.json");
 const { merge } = require("webpack-merge");
@@ -18,6 +19,10 @@ function getRemoteEntryUrl(port) {
 module.exports = merge(common, {
     devtool: "eval-source-map",
     plugins: [
+        new CopyWebpackPlugin({
+            patterns: [
+                {from: "./src/favicon.ico"},
+            ]}),
         new NodePolyfillPlugin(),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "src", "index.html"),
