@@ -21,7 +21,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ### `yarn build`
 
-Builds the app for production to the `build` folder.\
+Builds the app for production to the `dist` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.\
@@ -35,7 +35,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 `docker build -t="apicurio/apicurio-registry-mt-ui" --rm .`
 
 ### Run the docker image
-`docker run -it -p 8080:80 -e TENANT_MANAGER_API=http://tenant-manager.example.com:8585/api/v1 apicurio/apicurio-registry-mt-ui`
+`docker run -p 8080:80 -e TENANT_MANAGER_API=http://localhost:8585/api/v1 apicurio/apicurio-registry-mt-ui`
 
 Note: you will need to pass some environment variables when running the docker image.  See the table
 below for details:

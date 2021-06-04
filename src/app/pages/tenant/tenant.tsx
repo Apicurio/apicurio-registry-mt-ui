@@ -19,9 +19,14 @@ import React from "react";
 import {PageComponent, PageProps, PageState} from "../basePage";
 import {Services} from "@app/services";
 import {PageSection, PageSectionVariants} from "@patternfly/react-core";
-// @ts-ignore
-const FederatedTestWidget = React.lazy(() => import("@apicurio/registry/FederatedTestWidget"));
 
+// @ts-ignore
+//const FederatedTestWidget = React.lazy(() => import("@apicurio/registry/FederatedTestWidget"));
+// <React.Suspense fallback="Loading Test Widget">
+//     <FederatedTestWidget />
+// </React.Suspense>
+// @ts-ignore
+//const ArtifactTypeIcon = React.lazy(() => import("@apicurio/registry/ArtifactTypeIcon"));
 
 /**
  * Properties
@@ -53,10 +58,9 @@ export class TenantPage extends PageComponent<TenantPageProps, TenantPageState> 
         return (
             <React.Fragment>
                 <PageSection variant={PageSectionVariants.default} isFilled={true}>
-                    <FederatedTestWidget />
+                    <h2>Hello world!</h2>
                 </PageSection>
             </React.Fragment>
-
         );
     }
 
