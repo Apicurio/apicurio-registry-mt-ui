@@ -35,7 +35,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 `docker build -t="apicurio/apicurio-registry-mt-ui" --rm .`
 
 ### Run the docker image
-`docker run -p 8080:80 -e TENANT_MANAGER_API=http://localhost:8585/api/v1 apicurio/apicurio-registry-mt-ui`
+`docker run -it -p 9090:80 apicurio/apicurio-registry-mt-ui`
 
 Note: you will need to pass some environment variables when running the docker image.  See the table
 below for details:
@@ -43,6 +43,7 @@ below for details:
 | Name | Description | Example |
 |------|-------------|---------|
 | TENANT_MANAGER_API | URL of the Tenant Manager API. | http://localhost:8585/api/v1 |
+| MT_REGISTRY_API    | URL of the Multi-Tenant Apicurio Registry API. | http://localhost:8080/t/$tenantId/apis/registry |
 
 ### Push the docker image
 If you've made changes to the docker image, you can push it to docker hub using e.g.:

@@ -1,6 +1,7 @@
 FROM nginx:1.21.0-alpine
 
 ENV TENANT_MANAGER_API http://localhost:8585
+ENV MT_REGISTRY_API http://localhost:8080/t/$tenantId/apis/registry
 
 COPY dist /usr/share/nginx/html
 COPY docker/config.template.js config.template.js

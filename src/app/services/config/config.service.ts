@@ -18,16 +18,6 @@
 import {ConfigType} from './config.type';
 import {Service} from "../baseService";
 
-const DEFAULT_CONFIG: ConfigType = {
-    auth: {
-        options: {
-        },
-        type: "none"
-    },
-    tenants: {
-        api: "http://localhost:8585/api/v1"
-    },
-};
 
 const DEFAULT_REGISTRY_CONFIG: any = {
     artifacts: {
@@ -50,6 +40,18 @@ const DEFAULT_REGISTRY_CONFIG: any = {
     }
 };
 
+const DEFAULT_CONFIG: ConfigType = {
+    auth: {
+        options: {
+        },
+        type: "none"
+    },
+    tenants: {
+        api: "http://localhost:8585/api/v1"
+    },
+    registry: DEFAULT_REGISTRY_CONFIG
+};
+
 /**
  * A simple configuration service.  Reads information from a global "ApicurioRegistryTsUiConfig" variable
  * that is typically included via JSONP.
@@ -68,7 +70,7 @@ export class ConfigService implements Service {
         }
 
         if (!w.ApicurioRegistryConfig) {
-            w.ApicurioRegistryConfig = DEFAULT_REGISTRY_CONFIG;
+            w.ApicurioRegistryConfig = this.config.registry;
         }
     }
 

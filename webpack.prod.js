@@ -29,8 +29,21 @@ module.exports = merge(common, {
             },
             shared: {
                 ...dependencies,
-                react: { singleton: true },
-                "react-dom": { singleton: true } },
+                react: {
+                    eager: true,
+                    singleton: true,
+                    requiredVersion: dependencies["react"],
+                },
+                "react-dom": {
+                    eager: true,
+                    singleton: true,
+                    requiredVersion: dependencies["react-dom"],
+                },
+                "react-router-dom": {
+                    singleton: true,
+                    requiredVersion: dependencies["react-router-dom"],
+                },
+            },
         }),
     ],
     module: {
