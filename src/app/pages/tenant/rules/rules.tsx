@@ -17,71 +17,58 @@
 
 import React from "react";
 import {Services} from "@app/services";
-import {
-    Breadcrumb, BreadcrumbItem,
-    Button,
-    Card,
-    CardBody,
-    CardFooter,
-    CardTitle,
-    PageSection,
-    PageSectionVariants
-} from "@patternfly/react-core";
+import {Breadcrumb, BreadcrumbItem, PageSection, PageSectionVariants} from "@patternfly/react-core";
 import {PageComponent, PageProps, PageState, TenantPageComponent} from "@app/pages";
 import {Link} from "react-router-dom";
+
+// @ts-ignore
+const FederatedRulesPage = React.lazy(() => import("@apicurio/registry/FederatedRulesPage"));
 
 /**
  * Properties
  */
 // tslint:disable-next-line:no-empty-interface
-export interface TenantPageProps extends PageProps {
+export interface TenantRulesPageProps extends PageProps {
 
 }
 
 /**
  * State
  */
-export interface TenantPageState extends PageState {
+export interface TenantRulesPageState extends PageState {
 }
 
 /**
- * The tenants page.
+ * The tenant global rules page.  Embeds the apicurio registry global rules page.
  */
-export class TenantPage extends TenantPageComponent<TenantPageProps, TenantPageState> {
+export class TenantRulesPage extends TenantPageComponent<TenantRulesPageProps, TenantRulesPageState> {
 
     // eslint-disable-next-line
-    constructor(props: Readonly<TenantPageProps>) {
+    constructor(props: Readonly<TenantRulesPageProps>) {
         super(props);
     }
 
     public renderPage(): React.ReactElement {
         const tenantId: string = this.tenantId();
+        const uiContextPath: string = this.contextPath();
         Services.getLoggerService().info(`Rendering page for tenant ${tenantId}`);
         return (
             <React.Fragment>
                 <PageSection variant={PageSectionVariants.light} className="mt-breadcrumbs">
                     <Breadcrumb>
                         <BreadcrumbItem><Link to="/" data-testid="breadcrumb-lnk-tenants">Tenants</Link></BreadcrumbItem>
-                        <BreadcrumbItem isActive={true}>{ tenantId }</BreadcrumbItem>
+                        <BreadcrumbItem><Link to={`/t/${tenantId}`} data-testid="breadcrumb-lnk-tenant">{ tenantId }</Link></BreadcrumbItem>
+                        <BreadcrumbItem isActive={true}>Global Rules</BreadcrumbItem>
                     </Breadcrumb>
                 </PageSection>
-                <PageSection variant={PageSectionVariants.default}>
-                    <Card>
-                        <CardTitle>Tenant Details</CardTitle>
-                        <CardBody>TBD - content goes here!!</CardBody>
-                        <CardFooter>
-                            <Link className="name"
-                                  to={`/t/${ encodeURIComponent(tenantId)}/artifacts`}>
-                                <Button variant="primary">View Artifacts</Button>
-                            </Link>
-                        </CardFooter>
-                    </Card>
-                </PageSection>
+                <React.Suspense fallback="Loading Rules">
+                    <FederatedRulesPage tenantId={tenantId} contextPath={uiContextPath} history={this.history()} />
+                </React.Suspense>
             </React.Fragment>
         );
     }
 
-    protected initializePageState(): TenantPageState {
+    protected initializePageState(): TenantRulesPageState {
         return {};
     }
 

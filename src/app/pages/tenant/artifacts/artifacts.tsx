@@ -17,71 +17,58 @@
 
 import React from "react";
 import {Services} from "@app/services";
-import {
-    Breadcrumb, BreadcrumbItem,
-    Button,
-    Card,
-    CardBody,
-    CardFooter,
-    CardTitle,
-    PageSection,
-    PageSectionVariants
-} from "@patternfly/react-core";
+import {Breadcrumb, BreadcrumbItem, PageSection, PageSectionVariants} from "@patternfly/react-core";
 import {PageComponent, PageProps, PageState, TenantPageComponent} from "@app/pages";
 import {Link} from "react-router-dom";
+
+// @ts-ignore
+const FederatedArtifactsPage = React.lazy(() => import("@apicurio/registry/FederatedArtifactsPage"));
 
 /**
  * Properties
  */
 // tslint:disable-next-line:no-empty-interface
-export interface TenantPageProps extends PageProps {
+export interface TenantArtifactsPageProps extends PageProps {
 
 }
 
 /**
  * State
  */
-export interface TenantPageState extends PageState {
+export interface TenantArtifactsPageState extends PageState {
 }
 
 /**
- * The tenants page.
+ * The tenant artifacts page.  Embeds the apicurio registry Artifacts page.
  */
-export class TenantPage extends TenantPageComponent<TenantPageProps, TenantPageState> {
+export class TenantArtifactsPage extends TenantPageComponent<TenantArtifactsPageProps, TenantArtifactsPageState> {
 
     // eslint-disable-next-line
-    constructor(props: Readonly<TenantPageProps>) {
+    constructor(props: Readonly<TenantArtifactsPageProps>) {
         super(props);
     }
 
     public renderPage(): React.ReactElement {
         const tenantId: string = this.tenantId();
+        const uiContextPath: string = this.contextPath();
         Services.getLoggerService().info(`Rendering page for tenant ${tenantId}`);
         return (
             <React.Fragment>
                 <PageSection variant={PageSectionVariants.light} className="mt-breadcrumbs">
                     <Breadcrumb>
                         <BreadcrumbItem><Link to="/" data-testid="breadcrumb-lnk-tenants">Tenants</Link></BreadcrumbItem>
-                        <BreadcrumbItem isActive={true}>{ tenantId }</BreadcrumbItem>
+                        <BreadcrumbItem><Link to={`/t/${tenantId}`} data-testid="breadcrumb-lnk-tenant">{ tenantId }</Link></BreadcrumbItem>
+                        <BreadcrumbItem isActive={true}>Artifacts</BreadcrumbItem>
                     </Breadcrumb>
                 </PageSection>
-                <PageSection variant={PageSectionVariants.default}>
-                    <Card>
-                        <CardTitle>Tenant Details</CardTitle>
-                        <CardBody>TBD - content goes here!!</CardBody>
-                        <CardFooter>
-                            <Link className="name"
-                                  to={`/t/${ encodeURIComponent(tenantId)}/artifacts`}>
-                                <Button variant="primary">View Artifacts</Button>
-                            </Link>
-                        </CardFooter>
-                    </Card>
-                </PageSection>
+                <React.Suspense fallback="Loading Artifacts">
+                    <FederatedArtifactsPage tenantId={tenantId} contextPath={uiContextPath} history={this.history()} />
+                </React.Suspense>
             </React.Fragment>
         );
     }
 
-    protected initializePageState(): TenantPageState {
+    protected initializePageState(): TenantArtifactsPageState {
         return {};
     }
 

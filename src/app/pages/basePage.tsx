@@ -47,7 +47,7 @@ export interface PageState extends PureComponentState {
 
 
 /**
- * The artifacts page.
+ * The base class for all pages.
  */
 export abstract class PageComponent<P extends PageProps, S extends PageState> extends PureComponent<P, S> {
 
@@ -66,6 +66,11 @@ export abstract class PageComponent<P extends PageProps, S extends PageState> ex
     }
 
     protected abstract initializePageState(): S;
+
+    protected history(): any {
+        // @ts-ignore
+        return this.props.history;
+    }
 
     public componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
         this.handleError(PageErrorType.React, error, errorInfo);
@@ -175,4 +180,22 @@ export abstract class PageComponent<P extends PageProps, S extends PageState> ex
             isError: true
         });
     }
+}
+
+export abstract class TenantPageComponent<P extends PageProps, S extends PageState> extends PageComponent<P, S> {
+
+    protected constructor(props: Readonly<P>) {
+        super(props);
+    }
+
+    protected tenantId(): string {
+        const tenantId: string = this.getPathParam("tenantId");
+        return tenantId;
+    }
+
+    protected contextPath(): string {
+        const uiContextPath: string = `/t/${this.tenantId()}`;
+        return uiContextPath;
+    }
+
 }

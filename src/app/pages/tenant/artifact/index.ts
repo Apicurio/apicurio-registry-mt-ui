@@ -15,8 +15,4 @@
  * limitations under the License.
  */
 
-export * from "./tenant";
-export * from "./artifacts";
 export * from "./artifact";
-export * from "./artifactVersion";
-export * from "./rules";
