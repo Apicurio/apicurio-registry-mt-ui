@@ -128,7 +128,7 @@ export class TenantsPage extends PageComponent<TenantsPageProps, TenantsPageStat
         );
     }
 
-    protected doInitializeState(): TenantsPageState {
+    protected initializePageState(): TenantsPageState {
         return {
             tenants: []
         };

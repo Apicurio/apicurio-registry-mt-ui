@@ -29,6 +29,27 @@ const DEFAULT_CONFIG: ConfigType = {
     },
 };
 
+const DEFAULT_REGISTRY_CONFIG: any = {
+    artifacts: {
+        type: "rest",
+        url: ""
+    },
+    auth: {
+        type: "none"
+    },
+    features: {
+        readOnly: false,
+        breadcrumbs: false,
+        multiTenant: true,
+        multiTenantUrl: "http://localhost:8080/t/$tenantId/apis/registry"
+    },
+    mode: "dev",
+    ui: {
+        contextPath: null,
+        url: "http://localhost:8888/"
+    }
+};
+
 /**
  * A simple configuration service.  Reads information from a global "ApicurioRegistryTsUiConfig" variable
  * that is typically included via JSONP.
@@ -44,6 +65,10 @@ export class ConfigService implements Service {
         } else {
             console.warn("[ConfigService] App config not found! (using default)");
             this.config = DEFAULT_CONFIG;
+        }
+
+        if (!w.ApicurioRegistryConfig) {
+            w.ApicurioRegistryConfig = DEFAULT_REGISTRY_CONFIG;
         }
     }
 

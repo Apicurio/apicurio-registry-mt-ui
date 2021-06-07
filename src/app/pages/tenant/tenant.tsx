@@ -21,9 +21,7 @@ import {Services} from "@app/services";
 import {PageSection, PageSectionVariants} from "@patternfly/react-core";
 
 // @ts-ignore
-const FederatedTestWidget = React.lazy(() => import("@apicurio/registry/FederatedTestWidget"));
-// @ts-ignore
-//const ArtifactTypeIcon = React.lazy(() => import("@apicurio/registry/ArtifactTypeIcon"));
+const FederatedArtifactsPage = React.lazy(() => import("@apicurio/registry/FederatedArtifactsPage"));
 
 /**
  * Properties
@@ -54,18 +52,18 @@ export class TenantPage extends PageComponent<TenantPageProps, TenantPageState> 
         Services.getLoggerService().info(`Rendering page for tenant ${tenantId}`);
         return (
             <React.Fragment>
-                <PageSection variant={PageSectionVariants.default} isFilled={true}>
-                    <React.Suspense fallback="Loading Test Widget">
-                        <FederatedTestWidget />
-                    </React.Suspense>
+                <PageSection className="ps_artifacts-header" variant={PageSectionVariants.light}>
+                    <h1 style={ { fontSize: '22px' } }>Tenant { tenantId } Details</h1>
                 </PageSection>
+                <React.Suspense fallback="Loading Artifacts">
+                    <FederatedArtifactsPage tenantId={tenantId} />
+                </React.Suspense>
             </React.Fragment>
         );
     }
 
-    protected doInitializeState(): TenantPageState {
-        return {
-        };
+    protected initializePageState(): TenantPageState {
+        return {};
     }
 
     // @ts-ignore
