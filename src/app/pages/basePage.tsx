@@ -193,9 +193,9 @@ export abstract class TenantPageComponent<P extends PageProps, S extends PageSta
         return tenantId;
     }
 
-    protected contextPath(): string {
-        const uiContextPath: string = `/t/${this.tenantId()}`;
-        return uiContextPath;
+    protected navPath(): string {
+        const path: string = `/t/${this.tenantId()}`;
+        return path;
     }
 
 }

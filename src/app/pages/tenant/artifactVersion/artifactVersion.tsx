@@ -50,7 +50,7 @@ export class TenantArtifactVersionPage extends TenantPageComponent<TenantArtifac
 
     public renderPage(): React.ReactElement {
         const tenantId: string = this.tenantId();
-        const uiContextPath: string = this.contextPath();
+        const navPath: string = this.navPath();
         let groupId: string = this.getPathParam("groupId");
         let artifactId: string = this.getPathParam("artifactId");
         let version: string = this.getPathParam("version");
@@ -67,7 +67,7 @@ export class TenantArtifactVersionPage extends TenantPageComponent<TenantArtifac
                     </Breadcrumb>
                 </PageSection>
                 <React.Suspense fallback="Loading Artifact">
-                    <FederatedArtifactVersionPage tenantId={tenantId} contextPath={uiContextPath} history={this.history()}
+                    <FederatedArtifactVersionPage tenantId={tenantId} navPrefixPath={navPath} history={this.history()}
                                                   groupId={groupId} artifactId={artifactId} version={version} />
                 </React.Suspense>
             </React.Fragment>

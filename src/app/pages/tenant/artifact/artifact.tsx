@@ -48,13 +48,13 @@ export class TenantArtifactRedirectPage extends TenantPageComponent<TenantArtifa
 
     public renderPage(): React.ReactElement {
         const tenantId: string = this.tenantId();
-        const uiContextPath: string = this.contextPath();
+        const navPath: string = this.navPath();
         let groupId: string = this.getPathParam("groupId");
         let artifactId: string = this.getPathParam("artifactId");
         return (
             <React.Fragment>
                 <React.Suspense fallback="Loading Artifact">
-                    <FederatedArtifactRedirectPage tenantId={tenantId} contextPath={uiContextPath} history={this.history()}
+                    <FederatedArtifactRedirectPage tenantId={tenantId} navPrefixPath={navPath} history={this.history()}
                                                    groupId={groupId} artifactId={artifactId} />
                 </React.Suspense>
             </React.Fragment>

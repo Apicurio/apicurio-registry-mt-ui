@@ -50,7 +50,7 @@ export class TenantRulesPage extends TenantPageComponent<TenantRulesPageProps, T
 
     public renderPage(): React.ReactElement {
         const tenantId: string = this.tenantId();
-        const uiContextPath: string = this.contextPath();
+        const navPath: string = this.navPath();
         Services.getLoggerService().info(`Rendering page for tenant ${tenantId}`);
         return (
             <React.Fragment>
@@ -62,7 +62,7 @@ export class TenantRulesPage extends TenantPageComponent<TenantRulesPageProps, T
                     </Breadcrumb>
                 </PageSection>
                 <React.Suspense fallback="Loading Rules">
-                    <FederatedRulesPage tenantId={tenantId} contextPath={uiContextPath} history={this.history()} />
+                    <FederatedRulesPage tenantId={tenantId} navPrefixPath={navPath} history={this.history()} />
                 </React.Suspense>
             </React.Fragment>
         );

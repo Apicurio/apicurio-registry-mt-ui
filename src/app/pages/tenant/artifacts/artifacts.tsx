@@ -50,7 +50,7 @@ export class TenantArtifactsPage extends TenantPageComponent<TenantArtifactsPage
 
     public renderPage(): React.ReactElement {
         const tenantId: string = this.tenantId();
-        const uiContextPath: string = this.contextPath();
+        const navPath: string = this.navPath();
         Services.getLoggerService().info(`Rendering page for tenant ${tenantId}`);
         return (
             <React.Fragment>
@@ -62,7 +62,7 @@ export class TenantArtifactsPage extends TenantPageComponent<TenantArtifactsPage
                     </Breadcrumb>
                 </PageSection>
                 <React.Suspense fallback="Loading Artifacts">
-                    <FederatedArtifactsPage tenantId={tenantId} contextPath={uiContextPath} history={this.history()} />
+                    <FederatedArtifactsPage tenantId={tenantId} navPrefixPath={navPath} history={this.history()} />
                 </React.Suspense>
             </React.Fragment>
         );
