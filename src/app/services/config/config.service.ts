@@ -18,6 +18,28 @@
 import {ConfigType} from './config.type';
 import {Service} from "../baseService";
 
+
+const DEFAULT_REGISTRY_CONFIG: any = {
+    artifacts: {
+        type: "rest",
+        url: ""
+    },
+    auth: {
+        type: "none"
+    },
+    features: {
+        readOnly: false,
+        breadcrumbs: false,
+        multiTenant: true,
+        multiTenantUrl: "http://localhost:8080/t/:tenantId/apis/registry"
+    },
+    mode: "dev",
+    ui: {
+        contextPath: null,
+        url: "http://localhost:8888/"
+    }
+};
+
 const DEFAULT_CONFIG: ConfigType = {
     auth: {
         options: {
@@ -27,6 +49,7 @@ const DEFAULT_CONFIG: ConfigType = {
     tenants: {
         api: "http://localhost:8585/api/v1"
     },
+    registry: DEFAULT_REGISTRY_CONFIG
 };
 
 /**
@@ -42,8 +65,12 @@ export class ConfigService implements Service {
             this.config = w.ApicurioRegistryMtUiConfig;
             console.info("[ConfigService] Found app config.");
         } else {
-            console.error("[ConfigService] App config not found! (using default)");
+            console.warn("[ConfigService] App config not found! (using default)");
             this.config = DEFAULT_CONFIG;
+        }
+
+        if (!w.ApicurioRegistryConfig) {
+            w.ApicurioRegistryConfig = this.config.registry;
         }
     }
 

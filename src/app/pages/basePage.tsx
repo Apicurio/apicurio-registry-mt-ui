@@ -18,6 +18,7 @@
 import React from "react";
 import {ErrorPage, PageError, PureComponent, PureComponentProps, PureComponentState} from "../components";
 import {Services} from "../services";
+import {PageSection, PageSectionVariants, Spinner} from "@patternfly/react-core";
 
 // TODO this should be configurable via standard UI config settings
 const MAX_RETRIES: number = 5;
@@ -46,22 +47,30 @@ export interface PageState extends PureComponentState {
 
 
 /**
- * The artifacts page.
+ * The base class for all pages.
  */
 export abstract class PageComponent<P extends PageProps, S extends PageState> extends PureComponent<P, S> {
 
     protected constructor(props: Readonly<P>) {
         super(props);
+        setTimeout(() => {
+            this.loadPageData();
+        }, 10);
     }
 
     protected initializeState(): S {
         return {
-            ...this.doInitializeState(),
-            isLoading: this.loadPageData()
+            ...this.initializePageState(),
+            isLoading: true
         };
     }
 
-    protected abstract doInitializeState(): S;
+    protected abstract initializePageState(): S;
+
+    protected history(): any {
+        // @ts-ignore
+        return this.props.history;
+    }
 
     public componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
         this.handleError(PageErrorType.React, error, errorInfo);
@@ -70,7 +79,14 @@ export abstract class PageComponent<P extends PageProps, S extends PageState> ex
     public render(): React.ReactElement {
         if (this.isError()) {
             return (
-                <ErrorPage error={this.state.error} />
+                <ErrorPage error={this.state.error}/>
+            );
+        } else if (this.state.isLoading) {
+            return (
+                <PageSection variant={PageSectionVariants.default} isFilled={true}>
+                    <Spinner isSVG size="lg"/>
+                    <h2>Loading, please wait...</h2>
+                </PageSection>
             );
         } else {
             return this.renderPage();
@@ -107,30 +123,34 @@ export abstract class PageComponent<P extends PageProps, S extends PageState> ex
         return this.state.isLoading ? true : false;
     }
 
-    private loadPageData(): boolean {
+    private loadPageData(): void {
         // @ts-ignore
         let loaders: Promise | Promise[] | null = this.createLoaders();
         if (loaders == null) {
-            return false;
+            this.setSingleState("isLoading", false);
         } else {
             if (!Array.isArray(loaders)) {
                 loaders = [ loaders ];
             }
-            Promise.all(loaders).then( () => {
+            if (loaders.length === 0) {
                 this.setSingleState("isLoading", false);
-            }).catch( error => {
-                Services.getLoggerService().debug("[PageComponent] Page data load failed, retrying.");
-                const retries: number = this.getRetries();
-                if (retries < MAX_RETRIES) {
-                    this.incrementRetries();
-                    setTimeout(() => {
-                        this.loadPageData();
-                    }, Math.pow(2, retries) * 100);
-                } else {
-                    this.handleServerError(error, "Error loading page data.");
-                }
-            });
-            return true;
+            } else {
+                this.setSingleState("isLoading", true);
+                Promise.all(loaders).then(() => {
+                    this.setSingleState("isLoading", false);
+                }).catch(error => {
+                    Services.getLoggerService().debug("[PageComponent] Page data load failed, retrying.");
+                    const retries: number = this.getRetries();
+                    if (retries < MAX_RETRIES) {
+                        this.incrementRetries();
+                        setTimeout(() => {
+                            this.loadPageData();
+                        }, Math.pow(2, retries) * 100);
+                    } else {
+                        this.handleServerError(error, "Error loading page data.");
+                    }
+                });
+            }
         }
     }
 
@@ -160,4 +180,22 @@ export abstract class PageComponent<P extends PageProps, S extends PageState> ex
             isError: true
         });
     }
+}
+
+export abstract class TenantPageComponent<P extends PageProps, S extends PageState> extends PageComponent<P, S> {
+
+    protected constructor(props: Readonly<P>) {
+        super(props);
+    }
+
+    protected tenantId(): string {
+        const tenantId: string = this.getPathParam("tenantId");
+        return tenantId;
+    }
+
+    protected navPath(): string {
+        const path: string = `/t/${this.tenantId()}`;
+        return path;
+    }
+
 }
