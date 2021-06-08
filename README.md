@@ -32,7 +32,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 ## Docker Details
 
 ### Build the docker image
-`docker build -t="apicurio/apicurio-registry-mt-ui" --rm .`
+`docker build -t="apicurio/apicurio-registry-mt-ui:latest" -t="quay.io/apicurio/apicurio-registry-mt-ui:latest" --rm .`
 
 ### Run the docker image
 `docker run -it -p 9090:80 apicurio/apicurio-registry-mt-ui`
@@ -49,6 +49,7 @@ below for details:
 If you've made changes to the docker image, you can push it to docker hub using e.g.:
 
 `docker push apicurio/apicurio-registry-mt-ui:latest`
+`docker push quay.io/apicurio/apicurio-registry-mt-ui:latest`
 
 ## Learn More
 
