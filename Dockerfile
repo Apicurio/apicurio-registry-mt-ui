@@ -1,6 +1,6 @@
 FROM nginx:1.21.0-alpine
 
-ENV TENANT_MANAGER_API http://localhost:8585
+ENV TENANT_MANAGER_API http://localhost:8585/api/v1
 ENV MT_REGISTRY_API http://localhost:8080/t/:tenantId/apis/registry
 
 COPY dist /usr/share/nginx/html
