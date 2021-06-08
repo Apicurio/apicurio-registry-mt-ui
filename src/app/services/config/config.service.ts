@@ -31,7 +31,7 @@ const DEFAULT_REGISTRY_CONFIG: any = {
         readOnly: false,
         breadcrumbs: false,
         multiTenant: true,
-        multiTenantUrl: "http://localhost:8080/t/$tenantId/apis/registry"
+        multiTenantUrl: "http://localhost:8080/t/:tenantId/apis/registry"
     },
     mode: "dev",
     ui: {

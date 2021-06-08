@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
 const {dependencies} = require("./package.json");
@@ -13,6 +14,10 @@ const common = require("./webpack.common.js");
 module.exports = merge(common, {
     devtool: "source-map",
     plugins: [
+        new CopyWebpackPlugin({
+            patterns: [
+                {from: "./src/favicon.ico"},
+            ]}),
         new MiniCssExtractPlugin({
             filename: "[name].css",
             chunkFilename: "[id].css",

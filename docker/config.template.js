@@ -23,7 +23,8 @@ var ApicurioRegistryMtUiConfig = {
         },
         mode: "prod",
         ui: {
-            contextPath: null
+            contextPath: null,
+            navPrefixPath: null
         }
     }
 };

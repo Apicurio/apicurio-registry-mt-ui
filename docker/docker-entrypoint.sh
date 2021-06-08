@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 echo "---"
 echo "Generating config.js from template"
 envsubst < config.template.js > /usr/share/nginx/html/config.js
@@ -16,3 +17,4 @@ echo "___"
 echo "Starting nginx"
 
 nginx -g 'daemon off;'
+
