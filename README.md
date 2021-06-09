@@ -35,7 +35,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 `docker build -t="apicurio/apicurio-registry-mt-ui:latest" -t="quay.io/apicurio/apicurio-registry-mt-ui:latest" --rm .`
 
 ### Run the docker image
-`docker run -it -p 9090:80 apicurio/apicurio-registry-mt-ui`
+`docker run -it -p 9090:8080 apicurio/apicurio-registry-mt-ui`
 
 Note: you will need to pass some environment variables when running the docker image.  See the table
 below for details:
