@@ -1,7 +1,7 @@
 FROM nginx:1.21.0-alpine
 
 ENV TENANT_MANAGER_API http://localhost:8585/api/v1
-ENV MT_REGISTRY_API http://localhost:8080/t/:tenantId/apis/registry
+ENV MT_REGISTRY_APIS http://localhost:8080/t/:tenantId/apis
 
 
 # support running as arbitrary user which belogs to the root group

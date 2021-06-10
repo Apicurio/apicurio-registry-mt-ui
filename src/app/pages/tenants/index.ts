@@ -16,3 +16,5 @@
  */
 
 export * from "./tenants";
+export * from "./components";
+

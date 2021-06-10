@@ -76,8 +76,8 @@ export class ErrorPage extends PureComponent<ErrorPageProps, ErrorPageState> {
                             <Button variant="primary" onClick={this.reloadPage}>Reload page</Button>
                             <EmptyStateSecondaryActions>
                                 <Button variant="link"
-                                        data-testid="error-btn-artifacts"
-                                        onClick={this.navigateTo("/")}>Back to artifacts</Button>
+                                        data-testid="error-btn-tenants"
+                                        onClick={this.navigateTo("/")}>Back to tenants</Button>
                                 <Button variant="link"
                                         data-testid="error-btn-details"
                                         onClick={this.showDetails}>Show details</Button>

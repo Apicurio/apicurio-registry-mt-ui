@@ -56,7 +56,7 @@ export class TenantArtifactsPage extends TenantPageComponent<TenantArtifactsPage
             <React.Fragment>
                 <PageSection variant={PageSectionVariants.light} className="mt-breadcrumbs">
                     <Breadcrumb>
-                        <BreadcrumbItem><Link to="/" data-testid="breadcrumb-lnk-tenants">Tenants</Link></BreadcrumbItem>
+                        <BreadcrumbItem><Link to="/" data-testid="breadcrumb-lnk-tenants">Registries</Link></BreadcrumbItem>
                         <BreadcrumbItem><Link to={`/t/${tenantId}`} data-testid="breadcrumb-lnk-tenant">{ tenantId }</Link></BreadcrumbItem>
                         <BreadcrumbItem isActive={true}>Artifacts</BreadcrumbItem>
                     </Breadcrumb>

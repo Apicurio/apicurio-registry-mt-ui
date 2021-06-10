@@ -22,7 +22,7 @@ import {
     EmptyState,
     EmptyStateBody,
     EmptyStateIcon,
-    InputGroup,
+    InputGroup, Modal,
     PageSection,
     PageSectionVariants,
     TextInput,
@@ -39,6 +39,9 @@ import {RegistryTenant} from "../../models/registryTenant.model";
 import {NewRegistryTenantRequest} from "../../models";
 import {TableComposable, Tbody, Td, Th, Thead, Tr} from '@patternfly/react-table';
 import {Link} from "react-router-dom";
+import {CreateTenantModal} from "@app/pages";
+import "./tenants.css";
+
 
 /**
  * Properties
@@ -52,6 +55,8 @@ export interface TenantsPageProps extends PageProps {
  * State
  */
 export interface TenantsPageState extends PageState {
+    search: string;
+    isCreateTenantModalOpen: boolean;
     tenants: RegistryTenant[];
 }
 
@@ -66,7 +71,9 @@ export class TenantsPage extends PageComponent<TenantsPageProps, TenantsPageStat
     }
 
     public renderPage(): React.ReactElement {
-        const columns = ["Tenant ID", "Organization", "Created On"];
+        const columns = [
+            "ID", "Name", "Description"
+        ];
         return (
             <React.Fragment>
                 <If condition={() => this.state.tenants.length === 0}>
@@ -80,7 +87,7 @@ export class TenantsPage extends PageComponent<TenantsPageProps, TenantsPageStat
                                 We could not find any registries that you have access to.  Create a new registry instance
                                 by clicking the Create Registry button below.
                             </EmptyStateBody>
-                            <Button variant="primary" onClick={this.createRegistry}>Create Registry</Button>
+                            <Button variant="primary" onClick={this.createTenant}>Create Registry</Button>
                         </EmptyState>
                     </PageSection>
                 </If>
@@ -90,18 +97,21 @@ export class TenantsPage extends PageComponent<TenantsPageProps, TenantsPageStat
                             <ToolbarContent>
                                 <ToolbarItem>
                                     <InputGroup>
-                                        <TextInput name="textInput1" id="textInput1" type="search" aria-label="search input example" />
+                                        <TextInput name="textInput1" id="textInput1" type="search"
+                                                   aria-label="Search for registries"
+                                                   onChange={this.onSearchChange}
+                                        />
                                         <Button variant={ButtonVariant.control} aria-label="search button for search input">
                                             <SearchIcon />
                                         </Button>
                                     </InputGroup>
                                 </ToolbarItem>
                                 <ToolbarItem>
-                                    <Button variant="primary" onClick={this.createRegistry}>Create Registry</Button>
+                                    <Button variant="primary" onClick={this.createTenant}>Create Registry</Button>
                                 </ToolbarItem>
                             </ToolbarContent>
                         </Toolbar>
-                        <TableComposable  aria-label="Tenants table">
+                        <TableComposable aria-label="Registries table" className="tenant-table">
                             <Thead>
                                 <Tr>
                                     {columns.map((column, columnIndex) => (
@@ -110,26 +120,35 @@ export class TenantsPage extends PageComponent<TenantsPageProps, TenantsPageStat
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {this.state.tenants.map((tenant, rowIndex) => (
+                                {this.visibleTenants().map((tenant, rowIndex) => (
                                     <Tr key={rowIndex}>
-                                        <Td key={rowIndex + '_id'} dataLabel={columns[0]}>
+                                        <Td className="tenantId" key={rowIndex + '_id'} dataLabel={columns[0]}>
                                             <Link className="name"
                                                   to={`/t/${ encodeURIComponent(tenant.tenantId)}`}>{tenant.tenantId}</Link>
                                         </Td>
-                                        <Td key={rowIndex + '_orgId'} dataLabel={columns[1]}>{ tenant.organizationId }</Td>
-                                        <Td key={rowIndex + '_createdOn'} dataLabel={columns[2]}>{ tenant.createdOn }</Td>
+                                        <Td className="name" key={rowIndex + '_name'} dataLabel={columns[1]}>{ tenant.name }</Td>
+                                        <Td className="description" key={rowIndex + '_desc'} dataLabel={columns[2]}>
+                                            <span>{ tenant.description }</span>
+                                        </Td>
                                     </Tr>
                                 ))}
                             </Tbody>
                         </TableComposable>
                     </PageSection>
                 </If>
+                <CreateTenantModal
+                    onCreateTenant={this.doCreateTenant}
+                    isOpen={this.state.isCreateTenantModalOpen}
+                    onClose={this.onCreateTenantModalClose}></CreateTenantModal>
+
             </React.Fragment>
         );
     }
 
     protected initializePageState(): TenantsPageState {
         return {
+            isCreateTenantModalOpen: false,
+            search: "",
             tenants: []
         };
     }
@@ -141,14 +160,48 @@ export class TenantsPage extends PageComponent<TenantsPageProps, TenantsPageStat
         });
     }
 
-    private createRegistry = (): void => {
-        const request: NewRegistryTenantRequest = {
-            organizationId: "my-organization",
-            resources: [],
-            tenantId: "tenant-" + Math.floor(Math.random() * 100)
-        };
+    private createTenant = (): void => {
+        this.setSingleState("isCreateTenantModalOpen", true);
+    };
+
+    private onCreateTenantModalClose = (): void => {
+        this.setSingleState("isCreateTenantModalOpen", false);
+    };
+
+    private doCreateTenant = (request: NewRegistryTenantRequest): void => {
+        this.onCreateTenantModalClose();
         Services.getTenantsService().createTenant(request).then(tenant => {
-            this.setSingleState("tenants", [ ...this.state.tenants, tenant ]);
+            const tenantLocation: string = `/t/${ encodeURIComponent(tenant.tenantId)}`
+            this.navigateTo(tenantLocation)();
+        }).catch(error => {
+            this.handleServerError(error, "Error creating registry.");
         });
     };
+
+    private onSearchChange = (value: string): void => {
+        this.setSingleState("search", value, () => {
+        });
+    };
+
+    private visibleTenants(): RegistryTenant[] {
+        return this.state.tenants.filter(t => this.acceptTenant(t));
+    }
+
+    private acceptTenant = (tenant: RegistryTenant): boolean => {
+        if (!this.state.search || this.state.search.trim() === "") {
+            return true;
+        }
+        const srch: string = this.state.search.toLowerCase();
+        if (tenant.name && tenant.name.toLowerCase().indexOf(srch) !== -1) {
+            return true;
+        }
+        if (tenant.description && tenant.description.toLowerCase().indexOf(srch) !== -1) {
+            return true;
+        }
+        if (tenant.tenantId && tenant.tenantId.toLowerCase().indexOf(srch) !== -1) {
+            return true;
+        }
+        return false;
+    };
+
 }

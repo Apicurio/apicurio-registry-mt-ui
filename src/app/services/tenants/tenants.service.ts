@@ -37,4 +37,10 @@ export class TenantsService extends BaseService {
         return this.httpGet<RegistryTenant[]>(endpoint);
     }
 
+    public getTenant(tenantId: string): Promise<RegistryTenant> {
+        this.logger.debug("[TenantsService] Getting single tenant with ID %s", tenantId);
+        const endpoint: string = this.endpoint("/tenants/:tenantId", { tenantId });
+        return this.httpGet<RegistryTenant>(endpoint);
+    }
+
 }

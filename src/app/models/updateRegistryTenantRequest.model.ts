@@ -16,12 +16,10 @@
  */
 import {TenantResource} from "./tenantResource.model";
 
-export interface NewRegistryTenantRequest {
+export interface UpdateRegistryTenantRequest {
 
-    tenantId: string;
-    organizationId: string;
-    resources: TenantResource[];
     name: string;
     description: string;
+    resources: TenantResource[];
 
 }

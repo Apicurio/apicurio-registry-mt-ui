@@ -25,8 +25,13 @@ export interface TenantsConfig {
     api: string;
 }
 
+export interface RegistryConfig {
+    apis: string;
+    config: any;
+}
+
 export interface ConfigType {
     auth: AuthConfig;
     tenants: TenantsConfig;
-    registry: any;
+    registry: RegistryConfig;
 }

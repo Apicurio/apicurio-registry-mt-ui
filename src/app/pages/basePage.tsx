@@ -85,7 +85,7 @@ export abstract class PageComponent<P extends PageProps, S extends PageState> ex
             return (
                 <PageSection variant={PageSectionVariants.default} isFilled={true}>
                     <Spinner isSVG size="lg"/>
-                    <h2>Loading, please wait...</h2>
+                    <span style={{marginLeft: "10px", fontSize: "large"}}>Loading, please wait...</span>
                 </PageSection>
             );
         } else {

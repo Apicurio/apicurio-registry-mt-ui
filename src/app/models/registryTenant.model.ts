@@ -23,5 +23,7 @@ export interface RegistryTenant {
     organizationId: string;
     resources: TenantResource[];
     tenantId: string;
+    name: string;
+    description: string;
 
 }

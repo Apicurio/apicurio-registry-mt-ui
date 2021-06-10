@@ -49,7 +49,10 @@ const DEFAULT_CONFIG: ConfigType = {
     tenants: {
         api: "http://localhost:8585/api/v1"
     },
-    registry: DEFAULT_REGISTRY_CONFIG
+    registry: {
+        apis: "http://localhost:8080/t/:tenantId/apis",
+        config: DEFAULT_REGISTRY_CONFIG
+    }
 };
 
 /**
@@ -70,7 +73,7 @@ export class ConfigService implements Service {
         }
 
         if (!w.ApicurioRegistryConfig) {
-            w.ApicurioRegistryConfig = this.config.registry;
+            w.ApicurioRegistryConfig = this.config.registry.config;
         }
     }
 
@@ -97,5 +100,9 @@ export class ConfigService implements Service {
             return "";
         }
         return this.config.tenants.api;
+    }
+
+    public registryApisUrl(): string {
+        return this.config.registry.apis || "";
     }
 }
