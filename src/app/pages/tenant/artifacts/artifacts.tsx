@@ -62,7 +62,7 @@ export class TenantArtifactsPage extends TenantPageComponent<TenantArtifactsPage
                     </Breadcrumb>
                 </PageSection>
                 <React.Suspense fallback="Loading Artifacts">
-                    <FederatedArtifactsPage tenantId={tenantId} navPrefixPath={navPath} history={this.history()} />
+                    <FederatedArtifactsPage config={this.federatedConfig()} history={this.history()} />
                 </React.Suspense>
             </React.Fragment>
         );
