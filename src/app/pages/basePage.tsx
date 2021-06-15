@@ -198,4 +198,16 @@ export abstract class TenantPageComponent<P extends PageProps, S extends PageSta
         return path;
     }
 
+    protected federatedConfig(): any {
+        const config: any = Services.getConfigService().registryConfig();
+        const registryApi: string = (Services.getConfigService().registryApisUrl() + "/registry").replace(":tenantId", this.tenantId());
+        if (config.artifacts) {
+            config.artifacts.url = registryApi;
+        }
+        if (config.ui) {
+            config.ui.navPrefixPath = this.navPath();
+        }
+        return config;
+    }
+
 }

@@ -21,7 +21,6 @@ import {Service} from "../baseService";
 
 const DEFAULT_REGISTRY_CONFIG: any = {
     artifacts: {
-        type: "rest",
         url: ""
     },
     auth: {
@@ -30,13 +29,9 @@ const DEFAULT_REGISTRY_CONFIG: any = {
     features: {
         readOnly: false,
         breadcrumbs: false,
-        multiTenant: true,
-        multiTenantUrl: "http://localhost:8080/t/:tenantId/apis/registry"
+        multiTenant: true
     },
-    mode: "dev",
     ui: {
-        contextPath: null,
-        url: "http://localhost:8888/"
     }
 };
 
@@ -71,10 +66,6 @@ export class ConfigService implements Service {
             console.warn("[ConfigService] App config not found! (using default)");
             this.config = DEFAULT_CONFIG;
         }
-
-        if (!w.ApicurioRegistryConfig) {
-            w.ApicurioRegistryConfig = this.config.registry.config;
-        }
     }
 
     public init(): void {
@@ -104,5 +95,9 @@ export class ConfigService implements Service {
 
     public registryApisUrl(): string {
         return this.config.registry.apis || "";
+    }
+
+    public registryConfig(): any {
+        return this.config.registry.config || DEFAULT_CONFIG;
     }
 }

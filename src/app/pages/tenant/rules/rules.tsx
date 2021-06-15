@@ -62,7 +62,7 @@ export class TenantRulesPage extends TenantPageComponent<TenantRulesPageProps, T
                     </Breadcrumb>
                 </PageSection>
                 <React.Suspense fallback="Loading Rules">
-                    <FederatedRulesPage tenantId={tenantId} navPrefixPath={navPath} history={this.history()} />
+                    <FederatedRulesPage config={this.federatedConfig()} history={this.history()} />
                 </React.Suspense>
             </React.Fragment>
         );

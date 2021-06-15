@@ -54,7 +54,7 @@ export class TenantArtifactRedirectPage extends TenantPageComponent<TenantArtifa
         return (
             <React.Fragment>
                 <React.Suspense fallback="Loading Artifact">
-                    <FederatedArtifactRedirectPage tenantId={tenantId} navPrefixPath={navPath} history={this.history()}
+                    <FederatedArtifactRedirectPage history={this.history()} config={this.federatedConfig()}
                                                    groupId={groupId} artifactId={artifactId} />
                 </React.Suspense>
             </React.Fragment>
