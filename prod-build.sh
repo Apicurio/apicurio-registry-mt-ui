@@ -30,7 +30,7 @@ pwd
 ls -al
 ls -al dist
 
-cd ../..
+cd ../../..
 
 # Copy federated module into dist
 echo "Copying federated module to host 'dist'"
