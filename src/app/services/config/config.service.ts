@@ -32,6 +32,7 @@ const DEFAULT_REGISTRY_CONFIG: any = {
         multiTenant: true
     },
     ui: {
+        navPrefixPath: ""
     }
 };
 

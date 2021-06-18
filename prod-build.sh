@@ -1,6 +1,6 @@
 #!/bin/sh
 
-rm -rf dist
+yarn clean
 yarn install
 yarn build
 
@@ -12,9 +12,8 @@ mkdir .work
 cd .work
 git clone git@github.com:Apicurio/apicurio-registry.git
 cd apicurio-registry/ui
-git checkout feat/ui-federation
 yarn install
-yarn build
+yarn run build-mtui
 
 popd # Back to root dir
 

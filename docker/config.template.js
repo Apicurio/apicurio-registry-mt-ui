@@ -11,7 +11,6 @@ var ApicurioRegistryMtUiConfig = {
         apis: "$MT_REGISTRY_APIS",
         config: {
             artifacts: {
-                type: "rest",
                 url: ""
             },
             auth: {
@@ -20,13 +19,10 @@ var ApicurioRegistryMtUiConfig = {
             features: {
                 readOnly: false,
                 breadcrumbs: false,
-                multiTenant: true,
-                multiTenantUrl: "$MT_REGISTRY_APIS/registry"
+                multiTenant: true
             },
-            mode: "prod",
             ui: {
-                contextPath: null,
-                navPrefixPath: null
+                navPrefixPath: ""
             }
         }
     }
