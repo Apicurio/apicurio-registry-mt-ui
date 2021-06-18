@@ -21,4 +21,5 @@ popd # Back to root dir
 mkdir -p dist/modules/registry
 cp -rf .work/apicurio-registry/ui/dist/* dist/modules/registry
 
+
 docker build -t="apicurio/apicurio-registry-mt-ui:latest" -t="quay.io/apicurio/apicurio-registry-mt-ui:latest" --rm .
