@@ -10,7 +10,7 @@ pushd . # Push the root dir
 rm -rf .work
 mkdir .work
 cd .work
-git clone git@github.com:Apicurio/apicurio-registry.git
+git clone https://github.com/Apicurio/apicurio-registry.git
 cd apicurio-registry/ui
 yarn install
 yarn run build-mtui
