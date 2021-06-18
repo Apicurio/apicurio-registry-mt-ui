@@ -1,7 +1,7 @@
 #!/bin/sh
 
-yarn clean
 yarn install
+yarn clean
 yarn build
 
 pushd . # Push the root dir
