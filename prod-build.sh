@@ -4,8 +4,6 @@ yarn install
 yarn clean
 yarn build
 
-pushd . # Push the root dir
-
 # Clean the .work directory and then do the apicurio-registry federated module build
 rm -rf .work
 mkdir .work
@@ -15,7 +13,7 @@ cd apicurio-registry/ui
 yarn install
 yarn run build-mtui
 
-popd # Back to root dir
+cd ../..
 
 # Copy federated module into dist
 mkdir -p dist/modules/registry
