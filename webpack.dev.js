@@ -1,6 +1,7 @@
 const path = require("path");
 const { merge } = require("webpack-merge");
 const common = require("./webpack.common.js");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const HOST = process.env.HOST || "localhost";
 const PORT = process.env.PORT || "7777";
@@ -8,7 +9,13 @@ const PORT = process.env.PORT || "7777";
 
 module.exports = merge(common("development"), {
     devtool: "eval-source-map",
-    plugins: [],
+    plugins: [
+        new CopyWebpackPlugin({
+            patterns: [
+                {from: "./src/config.js"},
+                {from: "./src/favicon.ico"},
+            ]})
+    ],
     devServer: {
         contentBase: "./dist",
         host: HOST,

@@ -36,6 +36,11 @@ export interface AuthenticatedUser {
 
 export class AuthService implements Service {
 
+    // @ts-ignore
+    protected logger: LoggerService = null;
+    // @ts-ignore
+    protected config: ConfigService = null;
+
     private enabled: boolean = false;
     // @ts-ignore
     private config: ConfigService = null;
@@ -66,10 +71,6 @@ export class AuthService implements Service {
                     // @ts-ignore
                     .forEach(key => (user.roles = user.roles.concat(this.keycloak.resourceAccess[key].roles)))
             }
-
-            this.logger.info("----------------");
-            this.logger.info("Authenticated!  User info:", user);
-            this.logger.info("----------------");
         };
 
         const fakeUser: (() => AuthenticatedUser) = () => {
@@ -94,20 +95,25 @@ export class AuthService implements Service {
         this.keycloak.init(initOptions)
             .then((authenticated) => {
                 if (authenticated) {
+                    this.logger.info("[AuthService] Keycloak authentication successful.");
                     this.keycloak.loadUserInfo().then(() => {
+                        this.logger.info("[AuthService] Keycloak user loaded.");
                         this.user = infoToUser();
                         addRoles(this.user);
                         onAuthenticatedCallback();
                     }).catch(() => {
+                        this.logger.warn("[AuthService] Using fake KC user.");
                         this.user = fakeUser();
                         addRoles(this.user);
                         onAuthenticatedCallback();
                     })
                 } else {
-                    console.warn("Not authenticated!");
+                    this.logger.warn("[AuthService] Not authenticated!");
                     this.doLogin();
                 }
-            })
+            }).catch(error => {
+                this.logger.error("[AuthService] Keycloak auth failed: %o", error);
+            });
     };
 
     public isAuthenticated = () => this.keycloak.authenticated;
@@ -150,9 +156,11 @@ export class AuthService implements Service {
 
     public authenticateAndRender(render: () => void): void {
         if (this.config.authType() === "keycloakjs") {
+            this.logger.info("[AuthService] Keycloak authentication enabled.");
             this.enabled = true;
             this.authenticateUsingKeycloak(render);
         } else {
+            this.logger.info("[AuthService] Authentication disabled.  Rendering.");
             this.enabled = false;
             render();
         }
@@ -172,6 +180,19 @@ export class AuthService implements Service {
         };
         return interceptor;
     }
+
+    public getTokenFunction = (): (() => Promise<string>) => {
+        const self: AuthService = this;
+        return () => {
+            if (self.config.authType() === "keycloakjs") {
+                return this.keycloak.updateToken(5).then(() => {
+                    return Promise.resolve(self.getToken() as string);
+                });
+            } else {
+                return Promise.resolve("");
+            }
+        };
+    };
 
     // @ts-ignore
     private updateKeycloakToken = (successCallback) => {

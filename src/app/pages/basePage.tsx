@@ -207,6 +207,9 @@ export abstract class TenantPageComponent<P extends PageProps, S extends PageSta
         if (config.ui) {
             config.ui.navPrefixPath = this.navPath();
         }
+        if (config.auth && config.auth.type === "gettoken") {
+            config.auth.getToken = Services.getAuthService().getTokenFunction();
+        }
         return config;
     }
 

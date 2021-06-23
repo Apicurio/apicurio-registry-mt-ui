@@ -48,7 +48,7 @@
     "@patternfly/react-table": "4.27.7",
     "@patternfly/react-icons": "4.10.7",
     "axios": "0.21.1",
-    "keycloak-js": "13.0.1",
+    "keycloak-js": "10.0.2",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-moment": "1.1.1",
