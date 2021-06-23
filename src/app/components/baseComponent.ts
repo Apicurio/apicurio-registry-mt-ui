@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 import React from "react";
-import {Services} from "../services";
+import {Services} from "../../services";
 
 
 // tslint:disable-next-line:no-empty-interface

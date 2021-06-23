@@ -16,7 +16,6 @@
  */
 
 import React from "react";
-import {Services} from "@app/services";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -32,8 +31,9 @@ import {
 } from "@patternfly/react-core";
 import {PageProps, PageState, TenantPageComponent} from "@app/pages";
 import {Link} from "react-router-dom";
-import {RegistryTenant} from "@app/models";
 import "./tenant.css";
+import {Services} from "../../../services";
+import {RegistryTenant} from "../../../models";
 
 /**
  * Properties

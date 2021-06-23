@@ -34,9 +34,9 @@ import {
 import {PageComponent, PageProps, PageState} from "../basePage";
 import {SearchIcon, CubesIcon} from "@patternfly/react-icons";
 import {If} from "../../components";
-import {Services} from "../../services";
-import {RegistryTenant} from "../../models/registryTenant.model";
-import {NewRegistryTenantRequest} from "../../models";
+import {Services} from "../../../services";
+import {RegistryTenant} from "../../../models/registryTenant.model";
+import {NewRegistryTenantRequest} from "../../../models";
 import {TableComposable, Tbody, Td, Th, Thead, Tr} from '@patternfly/react-table';
 import {Link} from "react-router-dom";
 import {CreateTenantModal} from "@app/pages";

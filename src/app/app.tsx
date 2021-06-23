@@ -27,7 +27,7 @@ import {
     TenantRulesPage,
     TenantsPage
 } from "./pages";
-import {Services} from "./services";
+import {Services} from "../services";
 
 
 /**

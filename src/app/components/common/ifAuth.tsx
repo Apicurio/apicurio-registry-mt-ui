@@ -16,7 +16,7 @@
  */
 import React from "react";
 import {PureComponent, PureComponentProps, PureComponentState} from "../baseComponent";
-import {Services} from "../../services";
+import {Services} from "../../../services";
 
 /**
  * Properties

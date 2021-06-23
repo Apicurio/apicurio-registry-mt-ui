@@ -17,7 +17,7 @@
 
 import React from "react";
 import {ErrorPage, PageError, PureComponent, PureComponentProps, PureComponentState} from "../components";
-import {Services} from "../services";
+import {Services} from "../../services";
 import {PageSection, PageSectionVariants, Spinner} from "@patternfly/react-core";
 
 // TODO this should be configurable via standard UI config settings

@@ -16,10 +16,10 @@
  */
 
 import React from "react";
-import {Services} from "@app/services";
 import {Breadcrumb, BreadcrumbItem, PageSection, PageSectionVariants} from "@patternfly/react-core";
-import {PageComponent, PageProps, PageState, TenantPageComponent} from "@app/pages";
+import {PageProps, PageState, TenantPageComponent} from "@app/pages";
 import {Link} from "react-router-dom";
+import {Services} from "../../../../services";
 
 // @ts-ignore
 const FederatedArtifactsPage = React.lazy(() => import("@apicurio/registry/FederatedArtifactsPage"));

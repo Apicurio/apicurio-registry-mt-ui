@@ -17,8 +17,8 @@
 import React from 'react';
 import "./createTenantModal.css";
 import {Button, Form, FormGroup, Modal, TextArea, TextInput} from "@patternfly/react-core";
-import {NewRegistryTenantRequest} from "@app/models";
 import {PureComponent, PureComponentProps, PureComponentState} from "@app/components";
+import {NewRegistryTenantRequest} from "../../../../models";
 
 
 /**

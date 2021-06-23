@@ -16,10 +16,10 @@
  */
 
 import React from "react";
-import {Services} from "@app/services";
 import {Breadcrumb, BreadcrumbItem, PageSection, PageSectionVariants} from "@patternfly/react-core";
-import {PageComponent, PageProps, PageState, TenantPageComponent} from "@app/pages";
+import {PageProps, PageState, TenantPageComponent} from "@app/pages";
 import {Link} from "react-router-dom";
+import {Services} from "../../../../services";
 
 // @ts-ignore
 const FederatedRulesPage = React.lazy(() => import("@apicurio/registry/FederatedRulesPage"));
@@ -50,7 +50,6 @@ export class TenantRulesPage extends TenantPageComponent<TenantRulesPageProps, T
 
     public renderPage(): React.ReactElement {
         const tenantId: string = this.tenantId();
-        const navPath: string = this.navPath();
         Services.getLoggerService().info(`Rendering page for tenant ${tenantId}`);
         return (
             <React.Fragment>

@@ -17,7 +17,6 @@
 
 import React from "react";
 import {PageProps, PageState, TenantPageComponent} from "@app/pages";
-import {PureComponent} from "@app/components";
 
 // @ts-ignore
 const FederatedArtifactRedirectPage = React.lazy(() => import("@apicurio/registry/FederatedArtifactRedirectPage"));
