@@ -1,0 +1,52 @@
+version: "3.9"
+services:
+#  auth:
+#    image: "jboss/keycloak:14.0.0"
+#    restart: "always"
+#    ports:
+#      - "8090:8080"
+#    environment:
+#      KEYCLOAK_USER: "keycloak"
+#      KEYCLOAK_PASSWORD: "password"
+#      PROXY_ADDRESS_FORWARDING: "true"
+
+  tenantManagerDB:
+    image: "postgres:12"
+    restart: "unless-stopped"
+    environment:
+      POSTGRES_DB: "tenants_db"
+      POSTGRES_USER: "pguser"
+      POSTGRES_PASSWORD: "pgpass"
+
+  tenantManager:
+    image: "apicurio/apicurio-registry-tenant-manager-api:latest-snapshot"
+    restart: "unless-stopped"
+    ports:
+      - "8585:8585"
+    depends_on:
+      - tenantManagerDB
+    environment:
+      DATASOURCE_URL: "jdbc:postgresql://tenantManagerDB:5432/tenants_db"
+      DATASOURCE_USERNAME: "pguser"
+      DATASOURCE_PASSWORD: "pgpass"
+      AUTH_ENABLED: "false"
+      REGISTRY_ROUTE_URL: "http://localhost:8080"
+#      TENANT_MANAGER_DEFAULT_SCHEMA: "TENANTMANAGER"
+
+  registry:
+    image: "apicurio/apicurio-registry-mem:latest-snapshot"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - tenantManager
+    environment:
+      AUTH_ENABLED: "true"
+      KEYCLOAK_REALM: "apicurio-local"
+      KEYCLOAK_URL: "https://studio-auth.apicur.io/auth"
+      REGISTRY_ENABLE_MULTITENANCY: "true"
+      REGISTRY_LOGCONFIGJOB_EVERY: "300s"
+      REGISTRY_MULTITENANCY_AUTHORIZATION_ENABLED: "false"
+      ROLE_BASED_AUTHZ_ENABLED: "true"
+      ROLE_BASED_AUTHZ_SOURCE: "application"
+      TENANT_MANAGER_AUTH_ENABLED: "false"
+      TENANT_MANAGER_URL: "http://tenantManager:8585"
