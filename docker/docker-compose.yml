@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.1"
 services:
 #  auth:
 #    image: "jboss/keycloak:14.0.0"
@@ -40,6 +40,8 @@ services:
     depends_on:
       - tenantManager
     environment:
+      # LOG_LEVEL: DEBUG
+      # REGISTRY_LOG_LEVEL: TRACE
       AUTH_ENABLED: "true"
       KEYCLOAK_REALM: "apicurio-local"
       KEYCLOAK_URL: "https://studio-auth.apicur.io/auth"
