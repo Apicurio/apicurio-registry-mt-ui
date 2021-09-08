@@ -25,6 +25,7 @@ import {
     TenantArtifactVersionPage,
     TenantPage,
     TenantRulesPage,
+    TenantRolesPage,
     TenantsPage
 } from "./pages";
 import {Services} from "../services";
@@ -59,6 +60,7 @@ export default class App extends React.PureComponent<{}, {}> {
                         <Route path='/' exact={true} component={TenantsPage}/>
                         <Route path='/t/:tenantId' exact={true} component={TenantPage}/>
                         <Route path='/t/:tenantId/rules' exact={true} component={TenantRulesPage}/>
+                        <Route path='/t/:tenantId/roles' exact={true} component={TenantRolesPage}/>
                         <Route path='/t/:tenantId/artifacts' exact={true} component={TenantArtifactsPage}/>
                         <Route path='/t/:tenantId/artifacts/:groupId/:artifactId' exact={true} component={TenantArtifactRedirectPage}/>
                         <Route path='/t/:tenantId/artifacts/:groupId/:artifactId/versions/:version' exact={true} component={tenantArtifactVersionPage} />

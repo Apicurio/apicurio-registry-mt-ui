@@ -15,9 +15,10 @@
  * limitations under the License.
  */
 
-export * from "./tenant";
-export * from "./artifacts";
-export * from "./artifact";
-export * from "./artifactVersion";
-export * from "./roles";
-export * from "./rules";
+export class TenantStatusValues {
+
+    public static READY: string = "READY";
+    public static TO_BE_DELETED: string = "TO_BE_DELETED";
+    public static DELETED: string = "DELETED";
+
+}

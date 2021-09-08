@@ -17,6 +17,8 @@
 
 export * from "./newRegistryTenantRequest.model";
 export * from "./registryTenant.model";
+export * from "./registryTenantList.model";
 export * from "./resourceTypes";
 export * from "./tenantResource.model";
 export * from "./updateRegistryTenantRequest.model";
+export * from "./tenantStatusValues";

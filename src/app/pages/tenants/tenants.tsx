@@ -156,7 +156,7 @@ export class TenantsPage extends PageComponent<TenantsPageProps, TenantsPageStat
     // @ts-ignore
     protected createLoaders(): Promise | null {
         return Services.getTenantsService().getTenants().then(tenants => {
-            this.setSingleState("tenants", tenants);
+            this.setSingleState("tenants", tenants.items);
         });
     }
 

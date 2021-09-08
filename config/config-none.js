@@ -17,7 +17,8 @@ var ApicurioRegistryMtUiConfig = {
             features: {
                 readOnly: false,
                 breadcrumbs: false,
-                multiTenant: true
+                multiTenant: true,
+                roleManagement: false
             },
             ui: {
                 navPrefixPath: ""

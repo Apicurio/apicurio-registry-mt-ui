@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {RegistryTenant} from "./registryTenant.model";
 
-export * from "./tenant";
-export * from "./artifacts";
-export * from "./artifact";
-export * from "./artifactVersion";
-export * from "./roles";
-export * from "./rules";
+export interface RegistryTenantList {
+
+    count: number;
+    items: RegistryTenant[];
+
+}

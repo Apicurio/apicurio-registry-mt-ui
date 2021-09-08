@@ -16,7 +16,7 @@
  */
 
 import {BaseService} from "../baseService";
-import {NewRegistryTenantRequest} from "../../models";
+import {NewRegistryTenantRequest, RegistryTenantList} from "../../models";
 import {RegistryTenant} from "../../models/registryTenant.model";
 
 /**
@@ -31,10 +31,12 @@ export class TenantsService extends BaseService {
         return this.httpPostWithReturn<any, RegistryTenant>(endpoint, data, this.options(headers));
     }
 
-    public getTenants(): Promise<RegistryTenant[]> {
+    public getTenants(): Promise<RegistryTenantList> {
         this.logger.debug("[TenantsService] Getting tenants");
-        const endpoint: string = this.endpoint("/tenants");
-        return this.httpGet<RegistryTenant[]>(endpoint);
+        const endpoint: string = this.endpoint("/tenants", {}, {
+            limit: 500
+        });
+        return this.httpGet<RegistryTenantList>(endpoint);
     }
 
     public getTenant(tenantId: string): Promise<RegistryTenant> {

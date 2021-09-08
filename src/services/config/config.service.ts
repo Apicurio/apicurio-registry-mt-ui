@@ -29,7 +29,8 @@ const DEFAULT_REGISTRY_CONFIG: any = {
     features: {
         readOnly: false,
         breadcrumbs: false,
-        multiTenant: true
+        multiTenant: true,
+        roleManagement: true
     },
     ui: {
         navPrefixPath: ""

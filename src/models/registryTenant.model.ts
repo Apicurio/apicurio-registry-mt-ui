@@ -20,10 +20,11 @@ export interface RegistryTenant {
 
     createdBy: string;
     createdOn: string;
+    description: string;
+    name: string;
     organizationId: string;
     resources: TenantResource[];
+    status: string;
     tenantId: string;
-    name: string;
-    description: string;
 
 }
