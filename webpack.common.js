@@ -1,128 +1,168 @@
+/* eslint-disable */
 const path = require("path");
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const { ModuleFederationPlugin } = require("webpack").container;
-const {dependencies} = require("./package.json");
+const CopyPlugin = require("copy-webpack-plugin");
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const Dotenv = require("dotenv-webpack");
+const {dependencies, federatedModuleName} = require("./package.json");
+delete dependencies.serve; // Needed for nodeshift bug
+const webpack = require("webpack");
+const ChunkMapper = require("@redhat-cloud-services/frontend-components-config/chunk-mapper");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-module.exports = (mode) => {
-    const isProduction = mode === "production";
-    console.info("Is production build? %o", isProduction);
-    return {
-        mode,
-        entry: {
-            app: path.join(__dirname, "src", "index.tsx")
-        },
-        plugins: [
-            new CopyWebpackPlugin({
-                patterns: [
-                    {from: "./src/favicon.ico"},
-                ]
-            }),
-            new NodePolyfillPlugin(),
-            new HtmlWebpackPlugin({
-                template: path.join(__dirname, "src", "index.html"),
-            }),
-            new ModuleFederationPlugin({
-                name: "apicurio-registry-mt-ui",
-                remotes: {
-                    '@apicurio/registry': isProduction ?
-                        `apicurio_registry@/modules/registry/apicurio_registry.js` :
-                        `apicurio_registry@//localhost:8888/apicurio_registry.js`,
-                },
-                shared: {
-                    ...dependencies,
-                    react: {
-                        eager: true,
-                        singleton: true,
-                        requiredVersion: dependencies["react"],
-                    },
-                    "react-dom": {
-                        eager: true,
-                        singleton: true,
-                        requiredVersion: dependencies["react-dom"],
-                    },
-                    "react-router-dom": {
-                        singleton: true,
-                        requiredVersion: dependencies["react-router-dom"],
-                    },
-                },
-            }),
+const isPatternflyStyles = (stylesheet) => stylesheet.includes("@patternfly/react-styles/css/") || stylesheet.includes("@patternfly/react-core/");
 
-        ],
-        module: {
-            rules: [
-                {
-                    test: /bootstrap\.js$/,
-                    loader: "bundle-loader",
-                    options: {
-                        lazy: true,
-                    }
-                },
-                {
-                    test: /\.(js|jsx)$/,
-                    exclude: /node_modules/,
-                    use: ["babel-loader"]
-                },
-                {
-                    test: /\.(tsx|ts)?$/,
-                    include: path.resolve(__dirname, "src"),
-                    use: [
-                        {
-                            loader: "ts-loader",
-                            options: {
-                                transpileOnly: true,
-                                experimentalWatchApi: true,
-                            }
-                        }
-                    ]
-                },
-                {
-                    test: /\.(ttf|eot|woff|woff2)$/,
-                    use: {
-                        loader: 'file-loader',
-                        options: {
-                            limit: 5000,
-                            outputPath: "fonts",
-                            name: isProduction ? '[contenthash:8].[ext]' : '[name].[ext]',
-                        }
-                    }
-                },
-                {
-                    test: /\.(svg|jpg|jpeg|png|gif)$/i,
-                    use: [
-                        {
-                            loader: 'url-loader',
-                            options: {
-                                limit: 5000,
-                                outputPath: "images",
-                                name: isProduction ? '[contenthash:8].[ext]' : '[name].[ext]',
-                            }
-                        }
-                    ]
-                },
-            ],
+module.exports = (env, argv) => {
+  const isProduction = argv && argv.mode === "production";
+  return {
+    entry: {
+      app: path.resolve(__dirname, "src", "index.tsx")
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(tsx|ts|jsx)?$/,
+          use: [
+            {
+              loader: "ts-loader",
+              options: {
+                transpileOnly: true,
+                experimentalWatchApi: true,
+              }
+            }
+          ]
         },
-        resolve: {
-            extensions: ['.js', '.ts', '.tsx', '.jsx'],
-            plugins: [
-                new TsconfigPathsPlugin({
-                    configFile: path.resolve(__dirname, './tsconfig.json')
-                })
-            ],
-            symlinks: false,
-            cacheWithContext: false
+        {
+          test: /\.css$/,
+          use: [MiniCssExtractPlugin.loader, "css-loader"],
+          include: (stylesheet => !isPatternflyStyles(stylesheet)),
+          sideEffects: true,
         },
-        output: {
-            filename: "[name].bundle.js",
-            path: path.join(__dirname, "dist"),
-            publicPath: "auto"
+        {
+          test: /\.css$/,
+          include: isPatternflyStyles,
+          use: ["null-loader"],
+          sideEffects: true
         },
-        performance: {
-            hints: false,
-            maxEntrypointSize: 2097152,
-            maxAssetSize: 1048576
+        {
+          test: /\.(ttf|eot|woff|woff2)$/,
+          use: {
+            loader: "file-loader",
+            options: {
+              limit: 5000,
+              name: "[contenthash:8].[ext]",
+            }
+          }
+        },
+        {
+          test: /\.(svg|jpg|jpeg|png|gif)$/i,
+          use: [
+            {
+              loader: "url-loader",
+              options: {
+                limit: 5000,
+                name: isProduction ? "[contenthash:8].[ext]" : "[name].[ext]",
+              }
+            }
+          ]
         }
-    }
+      ]
+    },
+    output: {
+      filename: "[name].bundle.js",
+      path: path.resolve(__dirname, "dist"),
+      publicPath: "auto"
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: path.resolve(__dirname, "src/public", "index.html")
+      }),
+      new Dotenv({
+        systemvars: true,
+        silent: true
+      }),
+      new CopyPlugin({
+        patterns: [
+          {from: "./src/public/favicon.ico", to: "images"}
+        ]
+      }),
+      new MiniCssExtractPlugin({
+        filename: "[name].[contenthash:8].css",
+        chunkFilename: "[contenthash:8].css",
+        insert: (linkTag) => {
+          const preloadLinkTag = document.createElement("link")
+          preloadLinkTag.rel = "preload"
+          preloadLinkTag.as = "style"
+          preloadLinkTag.href = linkTag.href
+          document.head.appendChild(preloadLinkTag)
+          document.head.appendChild(linkTag)
+        }
+      }),
+      new ChunkMapper({
+        modules: [
+          federatedModuleName
+        ]
+      }),
+      new webpack.container.ModuleFederationPlugin({
+        name: federatedModuleName,
+        remotes: {
+          '@apicurio/registry':
+              `promise new Promise(resolve => {
+                  const cfg = RegistryMtConfig || window.RegistryMtConfig;
+                  var registryUrl = "http://localhost:8888/apicurio_registry.js";
+                  console.info("RegistryMtConfig is", cfg);
+                  if (cfg && cfg.federatedModules && cfg.federatedModules.registry) {
+                      registryUrl = cfg.federatedModules.registry;
+                  }
+                  console.info("Loading registry-ui from: " + registryUrl);
+
+                  const script = document.createElement('script')
+                  script.src = registryUrl
+                  script.onload = () => {
+                      const proxy = {
+                        get: (request) => window.registry.get(request),
+                        init: (arg) => {
+                          try {
+                            return window.registry.init(arg)
+                          } catch(e) {
+                            console.log('ADS remote container already initialized')
+                          }
+                        }
+                      }
+                      resolve(proxy)
+                    }
+                    document.head.appendChild(script);
+              })`
+        },
+        shared: {
+          ...dependencies,
+          react: {
+            eager: true,
+            singleton: true,
+            requiredVersion: dependencies["react"],
+          },
+          "react-dom": {
+            eager: true,
+            singleton: true,
+            requiredVersion: dependencies["react-dom"],
+          },
+          "react-router-dom": {
+            singleton: true,
+            eager: true,
+            requiredVersion: dependencies["react-router-dom"],
+          }
+        },
+      })
+    ],
+    resolve: {
+      extensions: [".js", ".ts", ".tsx", ".jsx"],
+      plugins: [
+        new TsconfigPathsPlugin({
+          configFile: path.resolve(__dirname, "./tsconfig.json")
+        })
+      ],
+      symlinks: false,
+      cacheWithContext: false
+    },
+  }
 };

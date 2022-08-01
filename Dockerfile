@@ -1,26 +1,39 @@
-FROM nginx:1.21.0-alpine
+FROM registry.access.redhat.com/ubi8/nginx-118
 
-ENV TENANT_MANAGER_API http://localhost:8585/api/v1
-ENV MT_REGISTRY_APIS http://localhost:8080/t/:tenantId/apis
+USER root
 
+# Install dos2unix utility
+RUN yum install -y dos2unix
 
-# support running as arbitrary user which belogs to the root group
-RUN chmod g+rwx /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html
-RUN chgrp -R root /var/cache/nginx
+# Configure certificate and key
+RUN mkdir -p /etc/pki/nginx/private && \
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/pki/nginx/private/server.key -out /etc/pki/nginx/server.crt --batch && \
+    chown -R 1001:0 /etc/pki/nginx/ && chmod 755 /etc/pki/nginx/private/server.key /etc/pki/nginx/server.crt
 
+# Grant write permission to group
+RUN chmod -R g+w /opt/app-root/src /usr/local/bin/
 
-COPY dist /usr/share/nginx/html
-RUN rm /etc/nginx/conf.d/default.conf
-COPY docker/config.template.js config.template.js
-COPY docker/docker-entrypoint.sh docker-entrypoint.sh
-COPY docker/nginx.conf /etc/nginx/conf.d
+# Copy configuration scripts
+COPY --chown=1001:0 build/configs/create-config.sh /usr/local/bin/create-config.sh
+COPY --chown=1001:0 build/configs/configure-keycloak.sh /usr/local/bin/configure-keycloak.sh
+COPY --chown=1001:0 build/configs/entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY --chown=1001:0 build/configs/notify-gchat.sh /usr/local/bin/notify-gchat.sh
 
-EXPOSE 8080
+# Copy nginx config
+COPY --chown=1001:0 build/configs/nginx.conf /etc/nginx/nginx.conf
 
-# comment user directive as master process is run as user in OpenShift anyhow
-RUN sed -i.bak 's/^user/#user/' /etc/nginx/nginx.conf
+# To avoid build failure in windows, convert text files from DOS line
+# endings (carriage return + line feed) to Unix line endings (line feed).
+RUN dos2unix /usr/local/bin/create-config.sh && \
+    dos2unix /usr/local/bin/configure-keycloak.sh && \
+    dos2unix /usr/local/bin/entrypoint.sh && \
+    dos2unix /etc/nginx/nginx.conf
 
-RUN addgroup nginx root
-USER nginx
+# Copy dist files
+COPY --chown=1001:0 dist/ .
 
-CMD ["docker-entrypoint.sh"]
+# Expose port 8080 for http and 1337 for https
+EXPOSE 8080 1337
+
+USER 1001
+CMD /usr/local/bin/entrypoint.sh

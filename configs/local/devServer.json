@@ -1,0 +1,7 @@
+{
+  "host": "localhost",
+  "port": 7777,
+  "protocol": "http",
+  "keycloak": false,
+  "warning": "This configuration expects an instance of Fleet Manager to be running on localhost port 8081."
+}
