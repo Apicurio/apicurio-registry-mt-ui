@@ -20,6 +20,7 @@ import "@patternfly/patternfly/utilities/Sizing/sizing.css";
 import "@patternfly/patternfly/utilities/Spacing/spacing.css";
 import "@patternfly/patternfly/utilities/Display/display.css";
 import "@patternfly/patternfly/utilities/Flex/flex.css";
+import {BasenameContext} from "@rhoas/app-services-ui-shared";
 
 
 let keycloak: Keycloak.KeycloakInstance | undefined;
@@ -46,21 +47,23 @@ const App: React.FunctionComponent = () => {
     if (!initialized) return <Spinner/>;
 
     return (
-        <AlertProvider>
-            <RegistryMtConfigContext.Provider value={apiDesignerConfig}>
-                <KeycloakContext.Provider value={{keycloak, profile: keycloak?.profile}}>
-                    <KeycloakAuthProvider>
-                        <Router>
-                            <React.Suspense fallback={<Spinner/>}>
-                                <AppLayout>
-                                    <AppRoutes/>
-                                </AppLayout>
-                            </React.Suspense>
-                        </Router>
-                    </KeycloakAuthProvider>
-                </KeycloakContext.Provider>
-            </RegistryMtConfigContext.Provider>
-        </AlertProvider>
+        <BasenameContext.Provider value={{getBasename: () => ""}}>
+            <AlertProvider>
+                <RegistryMtConfigContext.Provider value={apiDesignerConfig}>
+                    <KeycloakContext.Provider value={{keycloak, profile: keycloak?.profile}}>
+                        <KeycloakAuthProvider>
+                            <Router>
+                                <React.Suspense fallback={<Spinner/>}>
+                                    <AppLayout>
+                                        <AppRoutes/>
+                                    </AppLayout>
+                                </React.Suspense>
+                            </Router>
+                        </KeycloakAuthProvider>
+                    </KeycloakContext.Provider>
+                </RegistryMtConfigContext.Provider>
+            </AlertProvider>
+        </BasenameContext.Provider>
     );
 }
 

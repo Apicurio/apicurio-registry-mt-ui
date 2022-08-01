@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useRef, useState} from "react";
+import React, {FunctionComponent, useEffect, useRef, useState} from "react";
 import "./instances.css";
 import {
     Drawer,
@@ -17,18 +17,63 @@ import {
     Title,
     TitleSizes
 } from "@patternfly/react-core";
+import {Registry, RegistryCreate} from '@rhoas/registry-management-sdk';
+import {CreateInstanceModal, RegistryInstances} from "@app/pages/components";
+import {RhosrService, useInterval, useRhosrService} from "@app/services";
+import {AlertsService, useAlertsService} from "@app/services/alerts";
 
 export type InstancesPageProps = {
 };
 
 export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: InstancesPageProps) => {
-    const [ isDrawerExpanded, setDrawerExpanded ] = useState(true);
+    const [ isLoading, setLoading ] = useState(false);
+    const [ isDrawerExpanded, setDrawerExpanded ] = useState(false);
+    const [ instances, setInstances ] = useState<Registry[]>();
+    const [ selectedInstance, setSelectedInstance ] = useState<Registry>();
+    const [ isCreateModalOpen, setCreateModalOpen ] = useState(false);
 
     const drawerRef: any = useRef<HTMLSpanElement>();
+
+    const rhosr: RhosrService = useRhosrService();
+    const alerts: AlertsService = useAlertsService();
 
     const onDrawerExpand = (): void => {
         drawerRef.current && drawerRef.current.focus();
     };
+
+    const doCreateInstance = (data: RegistryCreate): void => {
+        setCreateModalOpen(false);
+        rhosr.createRegistry(data).then(registry => {
+            console.debug("Registry created: ", registry);
+            // TODO add the registry to the list of registries and sort the result (instead of calling refresh())
+            refresh();
+        }).catch(error => {
+            // TODO handle error
+            console.error("Error creating registry: ", error);
+        });
+    };
+
+    const refresh = (callback?: () => void): void => {
+        rhosr.getRegistries().then(data => {
+            setInstances(data);
+            if (callback) {
+                callback();
+            }
+        }).catch(error => {
+            // TODO handle this error better
+            console.error("[RegistryInstances] Error getting registries: ", error);
+            setInstances([]);
+        });
+    };
+    useInterval(refresh, 5000);
+
+    useEffect(() => {
+        setLoading(true);
+        setSelectedInstance(undefined);
+        refresh(() => {
+            setLoading(false);
+        });
+    }, []);
 
     // The content of the side panel.  This should be a details panel with metadata and history (for example).
     const panelContent: React.ReactNode = (
@@ -36,7 +81,7 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
             <DrawerHead>
                 <TextContent>
                     <Text component={TextVariants.small} className="pf-u-mb-0">
-                        Name
+                        { selectedInstance?.name }
                     </Text>
                     <Title
                         headingLevel="h2"
@@ -62,23 +107,32 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
         <React.Fragment>
             <Drawer isStatic={false} position="right" isInline={false} isExpanded={isDrawerExpanded} onExpand={onDrawerExpand}>
                 <DrawerContent panelContent={panelContent}>
-                    <DrawerContentBody className="home-panel-body">
+                    <DrawerContentBody className="instances-panel-body">
                         <PageSection variant={PageSectionVariants.light} className="summary pf-m-padding-on-xl">
                             <TextContent>
                                 <Text component="h1" className="title">Apicurio Registry Instances</Text>
                                 <Text component="p" className="description">
-                                    Aliquam sit amet molestie leo, ut dapibus odio. Morbi tempor ac justo a sagittis.
-                                    Quisque ipsum sapien, finibus at viverra eget, scelerisque nec erat. Morbi tempus
-                                    euismod est eu interdum.
+                                    Manage your list of registry instances below.  Drill into an instance to manage
+                                    its configuration settings and collection of registered artifacts.
                                 </Text>
                             </TextContent>
                         </PageSection>
                         <PageSection variant={PageSectionVariants.default} isFilled={true}>
-                            <h1>INSTANCES GO HERE</h1>
+                            <RegistryInstances instances={instances}
+                                               isLoadingInstances={isLoading}
+                                               selectedInstance={selectedInstance}
+                                               onCreateInstanceClick={() => {
+                                                   setCreateModalOpen(true);
+                                               }}
+                                               onInstanceSelected={(instance) => {
+                                                    console.debug("[InstancesPage] Instance selected: ", instance);
+                                                    setSelectedInstance(instance)
+                                               }} />
                         </PageSection>
                     </DrawerContentBody>
                 </DrawerContent>
             </Drawer>
+            <CreateInstanceModal isOpen={isCreateModalOpen} onCreate={doCreateInstance} onCancel={() => {setCreateModalOpen(false)}}></CreateInstanceModal>
         </React.Fragment>
     );
 }
