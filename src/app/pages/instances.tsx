@@ -1,6 +1,7 @@
 import React, {FunctionComponent, useEffect, useRef, useState} from "react";
 import "./instances.css";
 import {
+    ClipboardCopy,
     Drawer,
     DrawerActions,
     DrawerCloseButton,
@@ -28,6 +29,7 @@ export type InstancesPageProps = {
 export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: InstancesPageProps) => {
     const [ isLoading, setLoading ] = useState(false);
     const [ isDrawerExpanded, setDrawerExpanded ] = useState(false);
+    const [ drawerInstance, setDrawerInstance ] = useState<Registry>();
     const [ instances, setInstances ] = useState<Registry[]>();
     const [ selectedInstance, setSelectedInstance ] = useState<Registry>();
     const [ isCreateModalOpen, setCreateModalOpen ] = useState(false);
@@ -81,7 +83,7 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
             <DrawerHead>
                 <TextContent>
                     <Text component={TextVariants.small} className="pf-u-mb-0">
-                        { selectedInstance?.name }
+                        Service Registry instance name
                     </Text>
                     <Title
                         headingLevel="h2"
@@ -89,7 +91,7 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
                         className="pf-u-mt-0"
                     >
                         <div className="instance-details-header">
-                            Instance Name Goes Here
+                            { drawerInstance?.name }
                         </div>
                     </Title>
                 </TextContent>
@@ -98,7 +100,43 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
                 </DrawerActions>
             </DrawerHead>
             <DrawerPanelBody>
-                <h1>PANEL BODY</h1>
+
+                    <Title
+                        headingLevel="h3"
+                        size={TitleSizes['l']}
+                        className="pf-u-mt-0"
+                    ><div>Connection</div></Title>
+                    <Text component={TextVariants.small} className="pf-u-mb-0">
+                        Use this information to connect an application or tool to this Service Registry.
+                    </Text>
+
+                    <Title
+                        headingLevel="h4"
+                        size={TitleSizes['s']}
+                        className="pf-u-mt-0"
+                    >Registry API</Title>
+                    <ClipboardCopy isReadOnly hoverTip="Copy" clickTip="Copied">
+                        {drawerInstance?.href}
+                    </ClipboardCopy>
+
+                    <Title
+                        headingLevel="h4"
+                        size={TitleSizes['s']}
+                        className="pf-u-mt-0"
+                    >Registry Url</Title>
+                    <ClipboardCopy isReadOnly hoverTip="Copy" clickTip="Copied">
+                        {drawerInstance?.registryUrl}
+                    </ClipboardCopy>
+
+                    <Title
+                        headingLevel="h4"
+                        size={TitleSizes['s']}
+                        className="pf-u-mt-0"
+                    >Registry Browser Url</Title>
+                    <ClipboardCopy isReadOnly hoverTip="Copy" clickTip="Copied">
+                        {drawerInstance?.browserUrl}
+                    </ClipboardCopy>
+
             </DrawerPanelBody>
         </DrawerPanelContent>
     );
@@ -123,6 +161,14 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
                                                selectedInstance={selectedInstance}
                                                onCreateInstanceClick={() => {
                                                    setCreateModalOpen(true);
+                                               }}
+                                               onConnectInstanceClick={(instance) => {
+                                                    console.debug("[InstancesPage] Open connect drawer: ", instance);
+                                                    setDrawerInstance(instance);
+                                                    setDrawerExpanded(!isDrawerExpanded);
+                                               }}
+                                               onDeleteInstanceClick={(instance) => {
+                                                   console.debug("[InstancesPage] TODO: Instance should be deleted: ", instance);
                                                }}
                                                onInstanceSelected={(instance) => {
                                                     console.debug("[InstancesPage] Instance selected: ", instance);
