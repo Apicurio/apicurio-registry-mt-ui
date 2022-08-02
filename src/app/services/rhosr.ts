@@ -21,7 +21,7 @@ async function getRegistries(auth: Auth, basePath: string): Promise<Registry[]> 
     );
     return api.getRegistries().then(res => {
         const registries: RegistryList = res?.data;
-        return registries.items;
+        return registries.items?.sort((r1, r2) => {return r1.name!.localeCompare(r2.name!)});
     });
 }
 

@@ -118,7 +118,7 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
                 <ResponsiveTable
                     ariaLabel="list of designs"
                     columns={columns}
-                    data={instances?.sort((r1, r2) => {return r1.name!.localeCompare(r2.name!)})}
+                    data={instances}
                     expectedLength={instances?.length}
                     minimumColumnWidth={350}
                     onRowClick={(row) => onInstanceSelected(row.row.id === selectedInstance?.id ? undefined : row.row)}
