@@ -2,6 +2,7 @@ import React, {FunctionComponent, useEffect, useRef, useState} from "react";
 import "./instances.css";
 import {
     ClipboardCopy,
+    Divider,
     Drawer,
     DrawerActions,
     DrawerCloseButton,
@@ -110,30 +111,31 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
                         Use this information to connect an application or tool to this Service Registry.
                     </Text>
 
+                    <Divider className="padding-top" />
                     <Title
                         headingLevel="h4"
                         size={TitleSizes['s']}
-                        className="pf-u-mt-0"
+                        className="padding-top"
                     >Registry API</Title>
-                    <ClipboardCopy isReadOnly hoverTip="Copy" clickTip="Copied">
+                    <ClipboardCopy isReadOnly hoverTip="Copy" clickTip="Copied" className="padding-top">
                         {drawerInstance?.href}
                     </ClipboardCopy>
 
                     <Title
                         headingLevel="h4"
                         size={TitleSizes['s']}
-                        className="pf-u-mt-0"
+                        className="padding-top"
                     >Registry Url</Title>
-                    <ClipboardCopy isReadOnly hoverTip="Copy" clickTip="Copied">
+                    <ClipboardCopy isReadOnly hoverTip="Copy" clickTip="Copied" className="padding-top">
                         {drawerInstance?.registryUrl}
                     </ClipboardCopy>
 
                     <Title
                         headingLevel="h4"
                         size={TitleSizes['s']}
-                        className="pf-u-mt-0"
+                        className="padding-top"
                     >Registry Browser Url</Title>
-                    <ClipboardCopy isReadOnly hoverTip="Copy" clickTip="Copied">
+                    <ClipboardCopy isReadOnly hoverTip="Copy" clickTip="Copied" className="padding-top">
                         {drawerInstance?.browserUrl}
                     </ClipboardCopy>
 

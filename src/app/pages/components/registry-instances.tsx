@@ -104,7 +104,7 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
     const toolbar: React.ReactNode = (
         <ToolbarGroup>
             <ToolbarItem>
-                <Button variant="primary" onClick={onCreateInstanceClick}>Create registry instance</Button>
+                <Button variant="primary" className="bottom-margin" onClick={onCreateInstanceClick}>Create registry instance</Button>
             </ToolbarItem>
         </ToolbarGroup>
     );
