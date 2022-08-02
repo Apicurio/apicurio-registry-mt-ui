@@ -50,7 +50,6 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
             setCreateModalOpen(false);
             // TODO add the registry to the list of registries and sort the result (instead of calling refresh())
             refresh();
-            alerts.instanceCreated(registry);
         }).catch(error => {
             console.error("Error creating registry: ", error);
             setCreateError(`Error creating registry: ${error}`);
@@ -183,9 +182,7 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
                     </DrawerContentBody>
                 </DrawerContent>
             </Drawer>
-            <CreateInstanceModal isOpen={isCreateModalOpen} errorMsg={createError} onCreate={doCreateInstance} onCancel={() => {setCreateModalOpen(false)}}>
-
-            </CreateInstanceModal>
+            <CreateInstanceModal isOpen={isCreateModalOpen} errorMsg={createError} onCreate={doCreateInstance} onCancel={() => {setCreateModalOpen(false)}}/>
         </React.Fragment>
     );
 }
