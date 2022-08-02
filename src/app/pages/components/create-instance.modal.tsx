@@ -1,17 +1,26 @@
 import React, {FunctionComponent, useEffect, useState} from "react";
-import {Button, Form, FormGroup, Modal, ModalVariant, TextInput} from "@patternfly/react-core";
+import {Alert, Button, Form, FormGroup, Modal, ModalVariant, TextInput} from "@patternfly/react-core";
 import {RegistryCreate} from "@rhoas/registry-management-sdk";
 
 export type CreateInstanceModalProps = {
     isOpen: boolean|undefined;
+    errorMsg: string|undefined;
     onCreate: (event: RegistryCreate) => void;
     onCancel: () => void;
 }
 
 
-export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = ({isOpen, onCreate, onCancel}: CreateInstanceModalProps) => {
+export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = ({isOpen, errorMsg, onCreate, onCancel}: CreateInstanceModalProps) => {
     const [isValid, setValid] = useState(false);
     const [name, setName] = useState("");
+
+    const errorMessage = () => {
+        if (errorMsg) {
+            return <Alert variant="danger" title={errorMsg} />;
+        } else {
+            return null;
+        }
+     }
 
     // Called when the user clicks the Create button in the modal
     const doCreate = (): void => {
@@ -50,7 +59,7 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
                 </Button>
             ]}
         >
-            <Form>
+            <Form>{errorMessage()}
                 <FormGroup label="Name" isRequired={true} fieldId="create-instance-name">
                     <TextInput
                         isRequired
