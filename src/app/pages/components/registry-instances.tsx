@@ -19,17 +19,16 @@ export type RegistryInstancesProps = {
     onInstanceSelected: (instance: Registry | undefined) => void;
     onCreateInstanceClick: () => void;
     onDeleteInstanceClick: (instance: Registry | undefined) => void;
-    onConnectInstanceClick: (instance: Registry | undefined) => void;
 }
 
 
 export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
-            {isLoadingInstances, instances, selectedInstance, onInstanceSelected, onCreateInstanceClick, onDeleteInstanceClick, onConnectInstanceClick}: RegistryInstancesProps) => {
+            {isLoadingInstances, instances, selectedInstance, onInstanceSelected, onCreateInstanceClick, onDeleteInstanceClick}: RegistryInstancesProps) => {
 
     const [sortByIndex, setSortByIndex] = useState<number>();
 
     const columns: any[] = [
-        { index: 0, id: "name", label: "Name", width: 30, sortable: true },
+        { index: 0, id: "name", label: "Name", width: 30, sortable: false },
         { index: 1, id: "owner", label: "Owner", width: 15, sortable: false },
         { index: 2, id: "status", label: "Status", width: 15, sortable: false },
         { index: 3, id: "created_at", label: "Created At", width: 25, sortable: false },
@@ -40,7 +39,7 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
         if (colIndex === 0) {
             return (
                 <div>
-                    <NavLink className="registry-title" location={`/registries/${registry.id}/editor`}>
+                    <NavLink className="registry-title" location={`/instances/${registry.id}`}>
                         <Truncate content={registry.name!} tooltipPosition="top" />
                     </NavLink>
                     <Truncate className="registry-summary" content={registry.description!}></Truncate>
@@ -72,7 +71,7 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
 
     const actionsFor = (registry: any): IAction[] => {
         return [
-            { title: "Connect", onClick: () => onConnectInstanceClick(registry) },
+            { title: "Connect", onClick: () => onInstanceSelected(registry) },
             { isSeparator: true, },
             { title: "Delete", onClick: () => onDeleteInstanceClick(registry) },
         ];
@@ -86,7 +85,7 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
             },
             columnIndex: column.index
         } : undefined;
-    };      
+    };
 
     const emptyState: React.ReactNode = (
         <EmptyState>
@@ -104,7 +103,7 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
     const toolbar: React.ReactNode = (
         <ToolbarGroup>
             <ToolbarItem>
-                <Button variant="primary" onClick={onCreateInstanceClick}>Create registry instance</Button>
+                <Button style={{marginBottom: "15px"}} variant="primary" onClick={onCreateInstanceClick}>Create registry instance</Button>
             </ToolbarItem>
         </ToolbarGroup>
     );
@@ -122,7 +121,7 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
                     data={instances}
                     expectedLength={instances?.length}
                     minimumColumnWidth={350}
-                    // onRowClick={(row) => onSelect(row.row.id === selectedDesign?.id ? undefined : row.row)}
+                    onRowClick={(row) => onInstanceSelected(row.row.id === selectedInstance?.id ? undefined : row.row)}
                     renderHeader={({ column, Th, key }) => (
                         <Th sort={sortParams(column)}
                             className="design-list-header"

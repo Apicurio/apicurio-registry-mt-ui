@@ -2,20 +2,10 @@
     background-color: var(--pf-c-page__main-section--BackgroundColor);
 }
 
-.summary .description {
-    font-size: 15px;
-    color: #333;
+.instance-drawer-panel-body {
 }
 
-.design-details-header {
-    display: flex;
-}
-
-.design-details-header .design-icon {
-    margin-right: 10px;
-}
-
-.design-details-header .design-name {
-    flex-grow: 1;
-    font-size: 18px;
+.instance-drawer-panel-body h4 {
+    padding-top: 20px;
+    font-weight: bold;
 }
