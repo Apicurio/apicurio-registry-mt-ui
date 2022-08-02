@@ -80,7 +80,7 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
     const sortParams = (column: any): ThProps["sort"] | undefined => {
         return column.sortable ? {
             sortBy: {
-                index: sortByIndex,
+                index: 0,
                 direction: "asc"
             },
             columnIndex: column.index
