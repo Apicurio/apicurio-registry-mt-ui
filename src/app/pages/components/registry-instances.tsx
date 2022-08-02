@@ -1,9 +1,15 @@
-import React, {FunctionComponent} from "react";
+import React, {FunctionComponent, useEffect, useState} from "react";
 import "./registry-instances.css";
 import {ListWithToolbar, NavLink} from "@app/components";
 import {Registry} from "@rhoas/registry-management-sdk";
+import {ResponsiveTable} from "@rhoas/app-services-ui-components";
 import {AddCircleOIcon} from "@patternfly/react-icons";
-import {Button, Card, CardBody, EmptyState, EmptyStateBody, EmptyStateIcon, Title} from "@patternfly/react-core";
+import {IAction} from "@patternfly/react-table";
+import {ThProps} from "@patternfly/react-table/src/components/TableComposable/Th";
+import {Button, Card, CardBody, EmptyState, EmptyStateBody, EmptyStateIcon, Title, KebabToggle, Truncate, ToolbarGroup, ToolbarItem} from "@patternfly/react-core";
+import {CustomActionsToggleProps} from "@patternfly/react-table/src/components/Table/ActionsColumn";
+import Moment from "react-moment";
+import {RegistryStatusLabel} from "@app/pages/components";
 
 
 export type RegistryInstancesProps = {
@@ -12,11 +18,76 @@ export type RegistryInstancesProps = {
     selectedInstance: Registry | undefined;
     onInstanceSelected: (instance: Registry | undefined) => void;
     onCreateInstanceClick: () => void;
+    onDeleteInstanceClick: (instance: Registry | undefined) => void;
+    onConnectInstanceClick: (instance: Registry | undefined) => void;
 }
 
 
 export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
-            {isLoadingInstances, instances, selectedInstance, onInstanceSelected, onCreateInstanceClick}: RegistryInstancesProps) => {
+            {isLoadingInstances, instances, selectedInstance, onInstanceSelected, onCreateInstanceClick, onDeleteInstanceClick, onConnectInstanceClick}: RegistryInstancesProps) => {
+
+    const [sortByIndex, setSortByIndex] = useState<number>();
+
+    const columns: any[] = [
+        { index: 0, id: "name", label: "Name", width: 30, sortable: true },
+        { index: 1, id: "owner", label: "Owner", width: 15, sortable: false },
+        { index: 2, id: "status", label: "Status", width: 15, sortable: false },
+        { index: 3, id: "created_at", label: "Created At", width: 25, sortable: false },
+    ];
+
+    const renderColumnData = (registry: Registry, colIndex: number): React.ReactNode => {
+        // Name.
+        if (colIndex === 0) {
+            return (
+                <div>
+                    <NavLink className="registry-title" location={`/registries/${registry.id}/editor`}>
+                        <Truncate content={registry.name!} tooltipPosition="top" />
+                    </NavLink>
+                    <Truncate className="registry-summary" content={registry.description!}></Truncate>
+                </div>
+            );
+        }
+        // Owner.
+        if (colIndex === 1) {
+            return <Truncate content={registry.owner!} tooltipPosition="top" />
+        }
+        // Status.
+        if (colIndex === 2) {
+            return <RegistryStatusLabel registry={registry} />;
+        }
+        // Created At.
+        if (colIndex === 3) {
+            return <Moment date={registry.created_at} fromNow={true} />
+        }
+        return <span />
+    };
+
+    const renderActionsToggle = (props: CustomActionsToggleProps): React.ReactNode => {
+        return <KebabToggle isDisabled={props.isDisabled} isOpen={props.isOpen} onToggle={(value, event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            props.onToggle(value);
+        }} />
+    }
+
+    const actionsFor = (registry: any): IAction[] => {
+        return [
+            { title: "Connect", onClick: () => onConnectInstanceClick(registry) },
+            { isSeparator: true, },
+            { title: "Delete", onClick: () => onDeleteInstanceClick(registry) },
+        ];
+    }
+
+    const sortParams = (column: any): ThProps["sort"] | undefined => {
+        return column.sortable ? {
+            sortBy: {
+                index: sortByIndex,
+                direction: "asc"
+            },
+            columnIndex: column.index
+        } : undefined;
+    };      
+
     const emptyState: React.ReactNode = (
         <EmptyState>
             <EmptyStateIcon icon={AddCircleOIcon} />
@@ -31,7 +102,11 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
     );
 
     const toolbar: React.ReactNode = (
-        <h2>TOOLBAR HERE</h2>
+        <ToolbarGroup>
+            <ToolbarItem>
+                <Button variant="primary" onClick={onCreateInstanceClick}>Create registry instance</Button>
+            </ToolbarItem>
+        </ToolbarGroup>
     );
 
     return (
@@ -41,19 +116,30 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
                              isLoading={isLoadingInstances}
                              isFiltered={false}
                              isEmpty={!instances || instances.length === 0}>
-                <Card isSelectable={false}>
-                    <CardBody className="panel-body">
-                        <div className="instance-list">
-                            {
-                                instances?.map((instance, index) => (
-                                    <div className="instance" style={{"padding": "20px"}} onClick={() => { onInstanceSelected(instance) }}>
-                                        <NavLink location={`/instances/${instance.id}`}>{instance.name}</NavLink>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    </CardBody>
-                </Card>
+                <ResponsiveTable
+                    ariaLabel="list of designs"
+                    columns={columns}
+                    data={instances}
+                    expectedLength={instances?.length}
+                    minimumColumnWidth={350}
+                    // onRowClick={(row) => onSelect(row.row.id === selectedDesign?.id ? undefined : row.row)}
+                    renderHeader={({ column, Th, key }) => (
+                        <Th sort={sortParams(column)}
+                            className="design-list-header"
+                            key={`header-${column.id}`}
+                            width={column.width}
+                            modifier="truncate">{column.label}</Th>
+                    )}
+                    renderCell={({ column, row, colIndex, Td, key }) => (
+                        <Td className="design-list-cell" key={`cell-${colIndex}-${row.id}`} children={renderColumnData(row as Registry, colIndex)} />
+                    )}
+                    renderActions={({row, ActionsColumn}) => (
+                        <ActionsColumn key={`actions-${row['id']}`}
+                                    actionsToggle={renderActionsToggle}
+                                    items={actionsFor(row)}/>
+                    )}
+                    isRowSelected={({ row }) => row.id === selectedInstance?.id}
+                />
             </ListWithToolbar>
         </div>
     );
