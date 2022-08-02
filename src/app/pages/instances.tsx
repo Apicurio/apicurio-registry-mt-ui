@@ -33,6 +33,7 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
     const [ instances, setInstances ] = useState<Registry[]>();
     const [ selectedInstance, setSelectedInstance ] = useState<Registry>();
     const [ isCreateModalOpen, setCreateModalOpen ] = useState(false);
+    const [ createError, setCreateError ] = useState<string>();
 
     const drawerRef: any = useRef<HTMLSpanElement>();
 
@@ -44,14 +45,15 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
     };
 
     const doCreateInstance = (data: RegistryCreate): void => {
-        setCreateModalOpen(false);
         rhosr.createRegistry(data).then(registry => {
             console.debug("Registry created: ", registry);
+            alerts.instanceCreated(registry);
+            setCreateModalOpen(false);
             // TODO add the registry to the list of registries and sort the result (instead of calling refresh())
             refresh();
         }).catch(error => {
-            // TODO handle error
             console.error("Error creating registry: ", error);
+            setCreateError(`Error creating registry: ${error}`);
         });
     };
 
@@ -160,6 +162,7 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
                                                isLoadingInstances={isLoading}
                                                selectedInstance={selectedInstance}
                                                onCreateInstanceClick={() => {
+                                                   setCreateError(undefined);
                                                    setCreateModalOpen(true);
                                                }}
                                                onConnectInstanceClick={(instance) => {
@@ -178,7 +181,9 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
                     </DrawerContentBody>
                 </DrawerContent>
             </Drawer>
-            <CreateInstanceModal isOpen={isCreateModalOpen} onCreate={doCreateInstance} onCancel={() => {setCreateModalOpen(false)}}></CreateInstanceModal>
+            <CreateInstanceModal isOpen={isCreateModalOpen} errorMsg={createError} onCreate={doCreateInstance} onCancel={() => {setCreateModalOpen(false)}}>
+
+            </CreateInstanceModal>
         </React.Fragment>
     );
 }
