@@ -89,6 +89,7 @@ module.exports = (env, argv) => {
       new MiniCssExtractPlugin({
         filename: "[name].[contenthash:8].css",
         chunkFilename: "[contenthash:8].css",
+        ignoreOrder: true,
         insert: (linkTag) => {
           const preloadLinkTag = document.createElement("link")
           preloadLinkTag.rel = "preload"
@@ -120,10 +121,10 @@ module.exports = (env, argv) => {
                   script.src = registryUrl
                   script.onload = () => {
                       const proxy = {
-                        get: (request) => window.registry.get(request),
+                        get: (request) => window.apicurio_registry.get(request),
                         init: (arg) => {
                           try {
-                            return window.registry.init(arg)
+                            return window.apicurio_registry.init(arg)
                           } catch(e) {
                             console.log('ADS remote container already initialized')
                           }
