@@ -13,6 +13,7 @@ export type CreateInstanceModalProps = {
 export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = ({isOpen, errorMsg, onCreate, onCancel}: CreateInstanceModalProps) => {
     const [isValid, setValid] = useState(false);
     const [name, setName] = useState("");
+    const [description, setDescription] = useState<string>();
 
     const errorMessage = () => {
         if (errorMsg) {
@@ -25,7 +26,8 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
     // Called when the user clicks the Create button in the modal
     const doCreate = (): void => {
         const data: RegistryCreate = {
-            name
+            name,
+            description
         };
         onCreate(data);
     };
@@ -42,6 +44,7 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
     // Whenever the modal is opened, set default values for the form.
     useEffect(() => {
         setName("");
+        setDescription(undefined);
     }, [isOpen]);
 
     return (
@@ -69,6 +72,17 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
                         aria-describedby="create-instance-name-helper"
                         value={name}
                         onChange={(value) => {setName(value)}}
+                        autoFocus={true}
+                    />
+                </FormGroup>
+                <FormGroup label="Description" isRequired={false} fieldId="create-instance-description">
+                    <TextInput
+                        type="text"
+                        id="create-instance-description"
+                        name="create-instance-description"
+                        aria-describedby="create-instance-description-helper"
+                        value={description}
+                        onChange={(value) => {setDescription(value)}}
                     />
                 </FormGroup>
             </Form>
