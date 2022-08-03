@@ -18,7 +18,7 @@ import {
     Title,
     TitleSizes
 } from "@patternfly/react-core";
-import {Registry, RegistryCreate} from '@rhoas/registry-management-sdk';
+import {Registry, RegistryCreate, RegistryStatusValue} from '@rhoas/registry-management-sdk';
 import {CreateInstanceModal, RegistryInstances} from "@app/pages/components";
 import {RhosrService, useInterval, useRhosrService} from "@app/services";
 import {AlertsService, useAlertsService} from "@app/services/alerts";
@@ -169,12 +169,12 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
                                                    console.debug("[InstancesPage] TODO: Instance should be deleted: ", instance);
                                                }}
                                                onInstanceSelected={(instance) => {
-                                                    console.debug("[InstancesPage] Instance selected: ", instance);
-                                                    if (instance?.id === selectedInstance?.id) {
-                                                        setSelectedInstance(undefined);
+                                                    console.debug("[InstancesPage] Instance selected: ", instance, selectedInstance);
+                                                    if (!instance) {
                                                         setDrawerExpanded(false);
-                                                    } else {
-                                                        setSelectedInstance(instance)
+                                                        setSelectedInstance(undefined);
+                                                    } else if (instance.status === RegistryStatusValue.Ready) {
+                                                        setSelectedInstance(instance);
                                                         setDrawerExpanded(true);
                                                     }
                                                }} />
