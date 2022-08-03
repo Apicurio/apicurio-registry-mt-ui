@@ -6,6 +6,6 @@ const RegistryMtConfig = {
         "registry": "http://localhost:8888/apicurio_registry.js"
     },
     "auth": {
-        "enabled": false
+        "enabled": true
     }
 }
