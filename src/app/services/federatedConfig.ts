@@ -1,8 +1,10 @@
 import {useParams} from "react-router-dom";
-import {useAlert, useBasename} from "@rhoas/app-services-ui-shared";
+import {useAlert, useAuth, useBasename} from "@rhoas/app-services-ui-shared";
 import {Basename} from "@rhoas/app-services-ui-shared/dist/esm/contexts/basename/Basename";
 import {Alert} from "@rhoas/app-services-ui-shared/dist/esm/contexts/alert/Alert";
 import {Registry} from "@rhoas/registry-management-sdk";
+import {RegistryMtConfigType, useRegistryMtContext} from "@app/contexts";
+import {Auth} from "@rhoas/app-services-ui-shared/dist/esm/contexts/auth/Auth";
 
 export enum AlertVariant {
     success = "success",
@@ -96,7 +98,7 @@ export interface NoneAuthConfig extends AuthConfig {
 
 // Used when `type=gettoken`
 export interface GetTokenAuthConfig extends AuthConfig {
-    getToken: () => Promise<string>;
+    getToken: () => Promise<string> | undefined;
 }
 
 export interface Principal {
@@ -126,28 +128,39 @@ export const useFederatedConfig: () => FederatedConfigFactory = (): FederatedCon
     const params: any = useParams();
     const basename: Basename = useBasename();
     const alerts: Alert = useAlert() || {};
+    const mtConfig: RegistryMtConfigType = useRegistryMtContext() as RegistryMtConfigType;
+    const auth: Auth = useAuth();
 
     const instanceId: string = params["instanceId"];
     const navPrefixPath: string = `${basename.getBasename()}/instances/${instanceId}/`;
 
     const createConfig = (registry: Registry): ApicurioRegistryFederatedConfig => {
         const artifactsUrl: string = (registry.registryUrl || "") + "/apis/registry";
+        const authConfig: OidcJsAuthConfig | NoneAuthConfig | GetTokenAuthConfig = mtConfig.auth.enabled ?
+            {
+                type: "gettoken",
+                getToken: auth.apicurio_registry.getToken,
+                rbacEnabled: true,
+                obacEnabled: false
+            }
+            :
+            {
+                type: "none",
+                rbacEnabled: false,
+                obacEnabled: false
+            };
         const config: ApicurioRegistryFederatedConfig = {
             artifacts: {
                 url: artifactsUrl
             },
-            auth: {
-                type: "none",
-                rbacEnabled: false,
-                obacEnabled: false
-            },
+            auth: authConfig,
             ui: {
                 navPrefixPath
             },
             features: {
                 alerts,
                 multiTenant: true,
-                roleManagement: false,
+                roleManagement: true,
                 breadcrumbs: false,
                 readOnly: false,
                 settings: true
