@@ -1,7 +1,7 @@
 import React, {FunctionComponent, useEffect, useState} from "react";
 import "./registry-instances.css";
 import {ListWithToolbar, NavLink} from "@app/components";
-import {Registry} from "@rhoas/registry-management-sdk";
+import {Registry, RegistryStatusValue} from "@rhoas/registry-management-sdk";
 import {ResponsiveTable} from "@rhoas/app-services-ui-components";
 import {AddCircleOIcon} from "@patternfly/react-icons";
 import {IAction} from "@patternfly/react-table";
@@ -34,17 +34,26 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
         { index: 3, id: "created_at", label: "Created At", width: 25, sortable: false },
     ];
 
+    const renderRegistryName = (registry: Registry) => {
+        if (registry.status && registry.status === RegistryStatusValue.Ready) {
+            return <div>
+                <NavLink className="registry-title" location={`/instances/${registry.id}`}>
+                    <Truncate content={registry.name!} tooltipPosition="top" />
+                </NavLink>
+                <Truncate className="registry-summary" content={registry.description!}></Truncate>
+            </div>
+        } else {
+            return <div>
+                <Truncate content={registry.name!} tooltipPosition="top" />
+                <Truncate className="registry-summary" content={registry.description!}></Truncate>
+            </div>
+        }
+    }
+
     const renderColumnData = (registry: Registry, colIndex: number): React.ReactNode => {
         // Name.
         if (colIndex === 0) {
-            return (
-                <div>
-                    <NavLink className="registry-title" location={`/instances/${registry.id}`}>
-                        <Truncate content={registry.name!} tooltipPosition="top" />
-                    </NavLink>
-                    <Truncate className="registry-summary" content={registry.description!}></Truncate>
-                </div>
-            );
+            return renderRegistryName(registry);
         }
         // Owner.
         if (colIndex === 1) {
