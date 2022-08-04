@@ -13,7 +13,7 @@ export type CreateInstanceModalProps = {
 export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = ({isOpen, errorMsg, onCreate, onCancel}: CreateInstanceModalProps) => {
     const [isValid, setValid] = useState(false);
     const [name, setName] = useState("");
-    const [description, setDescription] = useState<string>();
+    const [description, setDescription] = useState("");
 
     const errorMessage = () => {
         if (errorMsg) {
@@ -44,7 +44,7 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
     // Whenever the modal is opened, set default values for the form.
     useEffect(() => {
         setName("");
-        setDescription(undefined);
+        setDescription("");
     }, [isOpen]);
 
     return (
