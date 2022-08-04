@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - feat/hackaton
   pull_request:
     branches:
       - main
@@ -31,6 +32,12 @@ jobs:
           ./prod-build.sh
 
       - name: Push container image
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           docker push quay.io/apicurio/apicurio-registry-mt-ui:latest
+
+      - name: Push container image
+        if: github.event_name == 'push' && github.ref != 'refs/heads/main'
+        run: |
+          docker tag quay.io/apicurio/apicurio-registry-mt-ui:latest quay.io/apicurio/apicurio-registry-mt-ui:${GITHUB_REF##*/}
+          docker push quay.io/apicurio/apicurio-registry-mt-ui:${GITHUB_REF##*/}
