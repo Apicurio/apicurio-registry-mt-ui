@@ -1,4 +1,5 @@
 import {Configuration, RegistriesApi, Registry, RegistryCreate, RegistryList} from '@rhoas/registry-management-sdk';
+import { AdminApi } from "@rhoas/registry-instance-sdk"
 import {Auth, useAuth} from "@rhoas/app-services-ui-shared";
 import {RegistryMtConfigType, useRegistryMtContext} from "@app/contexts/config";
 import {LocalStorageService, useLocalStorageService} from "@app/services/local-storage";
@@ -92,6 +93,20 @@ async function deleteRegistry(auth: Auth, basePath: string, registryId: string):
     );
 }
 
+async function getExportDownloadUrlForRegistry(auth: Auth, basePath: string, instance: Registry) : Promise<string> {
+    const token: string | undefined = auth?.srs ? await auth?.srs.getToken() : "";
+
+    const instanceApi = new AdminApi(
+        new Configuration({
+        accessToken: token,
+        basePath: instance.registryUrl + "/apis/registry/v2",
+      })
+    );
+    return instanceApi.exportData(true).then(res => {
+        return res?.data?.href as string;
+    })
+}
+
 
 /**
  * The RHOSR Service interface.
@@ -101,6 +116,7 @@ export interface RhosrService {
     getRegistry(id: string): Promise<Registry>;
     createRegistry(data: RegistryCreate): Promise<Registry>;
     deleteRegistry(id: string): Promise<void>;
+    getExportDownloadUrlForRegistry(instance: Registry) : Promise<string>
 }
 
 /**
@@ -115,6 +131,7 @@ export const useRhosrService: () => RhosrService = (): RhosrService => {
         getRegistries: () => getRegistries(auth, config?.apis.srs || ""),
         getRegistry: (id) => getRegistry(auth, local, id, config?.apis.srs || ""),
         createRegistry: (data: RegistryCreate) => createRegistry(auth, config?.apis.srs || "", data),
-        deleteRegistry: (id) => deleteRegistry(auth, config?.apis.srs || "", id)
+        deleteRegistry: (id) => deleteRegistry(auth, config?.apis.srs || "", id),
+        getExportDownloadUrlForRegistry: (instance) => getExportDownloadUrlForRegistry(auth, config?.apis.srs || "", instance)
     };
 };

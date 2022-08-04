@@ -61,6 +61,7 @@
     "@redhat-cloud-services/frontend-components-config": "4.6.6",
     "@rhoas/app-services-ui-components": "^2.4.0",
     "@rhoas/app-services-ui-shared": "0.16.0",
+    "@rhoas/registry-instance-sdk": "^0.40.0",
     "@rhoas/registry-management-sdk": "0.34.3",
     "date-fns": "2.28.0",
     "dayjs": "1.11.3",

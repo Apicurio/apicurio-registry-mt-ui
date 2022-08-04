@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useRef, useState} from "react";
+import React, {FunctionComponent, ReactNode, useEffect, useRef, useState} from "react";
 import "./instances.css";
 import {
     ClipboardCopy,
@@ -23,6 +23,7 @@ import {CreateInstanceModal, RegistryInstances} from "@app/pages/components";
 import {RhosrService, useInterval, useRhosrService} from "@app/services";
 import {AlertsService, useAlertsService} from "@app/services/alerts";
 import { DeleteInstanceModal } from "./components/delete-instance.modal";
+import { DownloadArtifactsLink } from "./components/download-artifacts-link";
 
 export type InstancesPageProps = {
 };
@@ -60,16 +61,26 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
 
     const doDeleteInstance = (): void => {
         if (!instanceToDelete) return;
+        setLoading(true);
 
-        const id = instanceToDelete.id;
+        const instance = instanceToDelete
         setInstanceToDelete(undefined);
-        rhosr.deleteRegistry(id).then(() => {
-            console.debug("Registry deleted: ", id);
-            refresh();
+
+        rhosr.deleteRegistry(instance.id).then(() => {
+            setLoading(false);
+            alerts.instanceDeleted(instance)
+            refresh(() => {
+                setLoading(false);
+            });
         }).catch(error => {
+            setLoading(false);
             // TODO handle error
             console.error("Error deleting registry: ", error);
         });
+    }
+
+    const renderDownloadArtifacts = (instance: Registry, label: string) : React.ReactNode => {
+        return <DownloadArtifactsLink label={label} instance={instance} getExportDownloadUrlForRegistry={rhosr.getExportDownloadUrlForRegistry}/>
     }
 
     const refresh = (callback?: () => void): void => {
@@ -182,7 +193,8 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
                                                    setCreateModalOpen(true);
                                                }}
                                                onDeleteInstanceClick={(instance) => {
-                                                   console.debug("[InstancesPage] TODO: Instance should be deleted: ", instance);
+                                                    setInstanceToDelete(instance);
+                                                    console.debug("[InstancesPage] TODO: Instance should be deleted: ", instance);
                                                }}
                                                onInstanceSelected={(instance) => {
                                                     console.debug("[InstancesPage] Instance selected: ", instance, selectedInstance);
@@ -199,7 +211,8 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
                 </DrawerContent>
             </Drawer>
             <CreateInstanceModal isOpen={isCreateModalOpen} errorMsg={createError} onCreate={doCreateInstance} onCancel={() => {setCreateModalOpen(false)}}/>
-            <DeleteInstanceModal instance={instanceToDelete} onDelete={doDeleteInstance} onCancel={() => {setInstanceToDelete(undefined)}}></DeleteInstanceModal>
+            <DeleteInstanceModal instance={instanceToDelete} renderDownloadArtifacts={renderDownloadArtifacts} onDelete={doDeleteInstance} onCancel={() => {setInstanceToDelete(undefined)}}/>
         </React.Fragment>
     );
 }
+

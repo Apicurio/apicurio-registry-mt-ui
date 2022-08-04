@@ -82,7 +82,10 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
         return [
             { title: "Connect", onClick: () => onInstanceSelected(registry) },
             { isSeparator: true, },
-            { title: "Delete", onClick: () => onDeleteInstanceClick(registry) },
+            { title: "Delete", onClick: (event) => {
+                onDeleteInstanceClick(registry)
+                event.stopPropagation()
+            }},
         ];
     }
 
