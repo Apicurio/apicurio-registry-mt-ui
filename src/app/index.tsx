@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {BrowserRouter as Router} from "react-router-dom";
 import {AppLayout} from "@app/app-layout";
 import {AppRoutes} from "@app/routes";
-import {Spinner} from "@patternfly/react-core";
+import {EmptyState, EmptyStateIcon, Spinner, Title} from "@patternfly/react-core";
 import {RegistryMtConfigContext, RegistryMtConfigType} from "@app/contexts/config";
 import {getKeycloakInstance} from "./auth/keycloak/keycloakAuth";
 import {AlertProvider} from "@app/alerts";
@@ -31,6 +31,15 @@ const apiDesignerConfig: RegistryMtConfigType = RegistryMtConfig || window["Regi
 const App: React.FunctionComponent = () => {
     const [initialized, setInitialized] = useState(false);
 
+    const loadingState: React.ReactNode = (
+        <EmptyState>
+            <EmptyStateIcon variant="container" component={Spinner} />
+            <Title size="lg" headingLevel="h4">
+                Loading
+            </Title>
+        </EmptyState>
+    )
+
     // Initialize Keycloak
     useEffect(() => {
         if (apiDesignerConfig.auth.enabled) {
@@ -44,7 +53,7 @@ const App: React.FunctionComponent = () => {
         }
     }, []);
 
-    if (!initialized) return <Spinner/>;
+    if (!initialized) return loadingState;
 
     return (
         <BasenameContext.Provider value={{getBasename: () => ""}}>

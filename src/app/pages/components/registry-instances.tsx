@@ -1,15 +1,15 @@
-import React, {FunctionComponent, useEffect, useState} from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import "./registry-instances.css";
-import {ListWithToolbar, NavLink} from "@app/components";
-import {Registry, RegistryStatusValue} from "@rhoas/registry-management-sdk";
-import {ResponsiveTable} from "@rhoas/app-services-ui-components";
-import {AddCircleOIcon} from "@patternfly/react-icons";
-import {IAction} from "@patternfly/react-table";
-import {ThProps} from "@patternfly/react-table/src/components/TableComposable/Th";
-import {Button, Card, CardBody, EmptyState, EmptyStateBody, EmptyStateIcon, Title, KebabToggle, Truncate, ToolbarGroup, ToolbarItem} from "@patternfly/react-core";
-import {CustomActionsToggleProps} from "@patternfly/react-table/src/components/Table/ActionsColumn";
+import { ListWithToolbar, NavLink } from "@app/components";
+import { Registry, RegistryStatusValue } from "@rhoas/registry-management-sdk";
+import { ResponsiveTable } from "@rhoas/app-services-ui-components";
+import { AddCircleOIcon, ExclamationTriangleIcon, WarningTriangleIcon, WindowsIcon } from "@patternfly/react-icons";
+import { IAction } from "@patternfly/react-table";
+import { ThProps } from "@patternfly/react-table/src/components/TableComposable/Th";
+import { Button, Card, CardBody, EmptyState, EmptyStateBody, EmptyStateIcon, Title, KebabToggle, Truncate, ToolbarGroup, ToolbarItem, Spinner, EmptyStateVariant } from "@patternfly/react-core";
+import { CustomActionsToggleProps } from "@patternfly/react-table/src/components/Table/ActionsColumn";
 import Moment from "react-moment";
-import {RegistryStatusLabel} from "@app/pages/components";
+import { RegistryStatusLabel } from "@app/pages/components";
 
 
 export type RegistryInstancesProps = {
@@ -23,7 +23,7 @@ export type RegistryInstancesProps = {
 
 
 export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
-            {isLoadingInstances, instances, selectedInstance, onInstanceSelected, onCreateInstanceClick, onDeleteInstanceClick}: RegistryInstancesProps) => {
+    { isLoadingInstances, instances, selectedInstance, onInstanceSelected, onCreateInstanceClick, onDeleteInstanceClick }: RegistryInstancesProps) => {
 
     const [sortByIndex, setSortByIndex] = useState<number>();
 
@@ -82,10 +82,12 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
         return [
             { title: "Connect", onClick: () => onInstanceSelected(registry) },
             { isSeparator: true, },
-            { title: "Delete", onClick: (event) => {
-                onDeleteInstanceClick(registry)
-                event.stopPropagation()
-            }},
+            {
+                title: "Delete", onClick: (event) => {
+                    onDeleteInstanceClick(registry)
+                    event.stopPropagation()
+                }
+            },
         ];
     }
 
@@ -98,6 +100,15 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
             columnIndex: column.index
         } : undefined;
     };
+
+    const loadingState: React.ReactNode = (
+        <EmptyState>
+            <EmptyStateIcon variant="container" component={Spinner} />
+            <Title size="lg" headingLevel="h4">
+                Loading instances
+            </Title>
+        </EmptyState>
+    )
 
     const emptyState: React.ReactNode = (
         <EmptyState>
@@ -112,10 +123,27 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
         </EmptyState>
     );
 
+    const reloadPage = () => {
+        window.location.reload()
+    }
+
+    const errorState: React.ReactNode = (
+        <EmptyState variant={EmptyStateVariant.large}>
+            <EmptyStateIcon icon={ExclamationTriangleIcon} />
+            <Title headingLevel="h4" size="lg">
+                Error while fetching the list of instances.
+            </Title>
+            <EmptyStateBody>
+                To resolve the issue, please try reloading the page.
+            </EmptyStateBody>
+            <Button variant="primary" onClick={reloadPage}>Reload page</Button>
+        </EmptyState>
+    )
+
     const toolbar: React.ReactNode = (
         <ToolbarGroup>
             <ToolbarItem>
-                <Button style={{marginBottom: "15px"}} variant="primary" onClick={onCreateInstanceClick}>Create registry instance</Button>
+                <Button style={{ marginBottom: "15px" }} variant="primary" onClick={onCreateInstanceClick}>Create registry instance</Button>
             </ToolbarItem>
         </ToolbarGroup>
     );
@@ -123,10 +151,13 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
     return (
         <div className="instances">
             <ListWithToolbar toolbar={toolbar}
-                             emptyState={emptyState}
-                             isLoading={isLoadingInstances}
-                             isFiltered={false}
-                             isEmpty={!instances || instances.length === 0}>
+                emptyState={emptyState}
+                isLoading={isLoadingInstances}
+                loadingComponent={loadingState}
+                isFiltered={false}
+                isError={!instances}
+                errorComponent={errorState}
+                isEmpty={!instances || instances.length === 0}>
                 <ResponsiveTable
                     ariaLabel="list of designs"
                     columns={columns}
@@ -144,10 +175,10 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
                     renderCell={({ column, row, colIndex, Td, key }) => (
                         <Td className="design-list-cell" key={`cell-${colIndex}-${row.id}`} children={renderColumnData(row as Registry, colIndex)} />
                     )}
-                    renderActions={({row, ActionsColumn}) => (
+                    renderActions={({ row, ActionsColumn }) => (
                         <ActionsColumn key={`actions-${row['id']}`}
-                                    actionsToggle={renderActionsToggle}
-                                    items={actionsFor(row)}/>
+                            actionsToggle={renderActionsToggle}
+                            items={actionsFor(row)} />
                     )}
                     isRowSelected={({ row }) => row.id === selectedInstance?.id}
                 />

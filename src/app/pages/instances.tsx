@@ -69,7 +69,7 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
             alerts.instanceDeleted(instance)
             refresh();
         }).catch(error => {
-            // TODO handle error
+            alerts.instanceDeleteError(instance)
             console.error("Error deleting registry: ", error);
         });
     }
@@ -84,10 +84,12 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
             if (callback) {
                 callback();
             }
-        }).catch(error => {
-            // TODO handle this error better
+        }).catch(error => { 
             console.error("[RegistryInstances] Error getting registries: ", error);
-            setInstances([]);
+            setInstances(undefined);
+            if (callback) {
+                callback();
+            }
         });
     };
     useInterval(refresh, 5000);
