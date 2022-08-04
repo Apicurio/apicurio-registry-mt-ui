@@ -1,5 +1,5 @@
 import React, {FunctionComponent, useEffect, useState} from "react";
-import {Alert, Button, Form, FormGroup, Modal, ModalVariant, TextInput} from "@patternfly/react-core";
+import {Button, Form, FormGroup, HelperText, HelperTextItem, Modal, ModalVariant, TextInput} from "@patternfly/react-core";
 import {RegistryCreate} from "@rhoas/registry-management-sdk";
 
 export type CreateInstanceModalProps = {
@@ -50,7 +50,7 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
     return (
         <Modal
             variant={ModalVariant.medium}
-            title="Create a registry instance"
+            title="Create a Apicurio Registry instance"
             isOpen={isOpen}
             onClose={onCancel}
             actions={[
@@ -84,6 +84,9 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
                         value={description}
                         onChange={(value) => {setDescription(value)}}
                     />
+                    <HelperText id="create-instance-name-helper">
+                        <HelperTextItem>Must start with a letter and end with a letter or number. Valid characters include lowercase letters from a to z, numbers from 0 to 9, and hyphens ( - ).</HelperTextItem>
+                    </HelperText>
                 </FormGroup>
             </Form>
         </Modal>
