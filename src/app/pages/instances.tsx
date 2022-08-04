@@ -61,19 +61,14 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
 
     const doDeleteInstance = (): void => {
         if (!instanceToDelete) return;
-        setLoading(true);
 
         const instance = instanceToDelete
         setInstanceToDelete(undefined);
 
         rhosr.deleteRegistry(instance.id).then(() => {
-            setLoading(false);
             alerts.instanceDeleted(instance)
-            refresh(() => {
-                setLoading(false);
-            });
+            refresh();
         }).catch(error => {
-            setLoading(false);
             // TODO handle error
             console.error("Error deleting registry: ", error);
         });
