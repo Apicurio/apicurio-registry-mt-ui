@@ -17,7 +17,6 @@ RUN chmod -R g+w /opt/app-root/src /usr/local/bin/
 COPY --chown=1001:0 build/configs/create-config.sh /usr/local/bin/create-config.sh
 COPY --chown=1001:0 build/configs/configure-keycloak.sh /usr/local/bin/configure-keycloak.sh
 COPY --chown=1001:0 build/configs/entrypoint.sh /usr/local/bin/entrypoint.sh
-COPY --chown=1001:0 build/configs/notify-gchat.sh /usr/local/bin/notify-gchat.sh
 
 # Copy nginx config
 COPY --chown=1001:0 build/configs/nginx.conf /etc/nginx/nginx.conf
