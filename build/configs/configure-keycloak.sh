@@ -34,8 +34,8 @@ then
     \"cors-exposed-headers\" : \"WWW-Authenticate\"
   }" > /opt/app-root/src/keycloak.json
 
-  echo "Generated keycloak.json successfully."
-  cat /opt/app-root/src/keycloak.json
+  echo "Authentication enabled. Generated keycloak.json successfully."
+  #cat /opt/app-root/src/keycloak.json
 else
   echo "Authentication disabled. Skipping Generation of keycloak.json"
 fi
