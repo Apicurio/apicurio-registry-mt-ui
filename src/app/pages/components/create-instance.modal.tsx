@@ -74,6 +74,9 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
                         onChange={(value) => {setName(value)}}
                         autoFocus={true}
                     />
+                    <HelperText id="create-instance-name-helper">
+                        <HelperTextItem>Must start with a letter and end with a letter or number. Valid characters include lowercase letters from a to z, numbers from 0 to 9, and hyphens ( - ).</HelperTextItem>
+                    </HelperText>
                 </FormGroup>
                 <FormGroup label="Description" isRequired={false} fieldId="create-instance-description">
                     <TextInput
@@ -84,9 +87,6 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
                         value={description}
                         onChange={(value) => {setDescription(value)}}
                     />
-                    <HelperText id="create-instance-name-helper">
-                        <HelperTextItem>Must start with a letter and end with a letter or number. Valid characters include lowercase letters from a to z, numbers from 0 to 9, and hyphens ( - ).</HelperTextItem>
-                    </HelperText>
                 </FormGroup>
             </Form>
         </Modal>

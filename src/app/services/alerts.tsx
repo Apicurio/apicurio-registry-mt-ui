@@ -6,6 +6,7 @@ import {Registry} from "@rhoas/registry-management-sdk";
 export interface AlertsService {
     instanceCreated(instance: Registry): void;
     instanceDeleted(instance: Registry): void;
+    instanceDeleteError(instance: Registry): void;
 }
 
 
@@ -31,6 +32,15 @@ export const useAlertsService: () => AlertsService = (): AlertsService => {
                 description: `Registry instance '${instance.name}' was marked for deletion.`,
                 variant: AlertVariant.success,
                 dataTestId: "toast-instance-deleted"
+            });
+        },
+
+        instanceDeleteError(instance) : void {
+            addAlert({
+                title: "Error while deleting the instance",
+                description: `There was an error while marking the Registry instance '${instance.name} for deletion. Please try it again.'`,
+                variant: AlertVariant.danger,
+                dataTestId: "toast-instance-deleted" //TODO Whats that?
             });
         },
     };

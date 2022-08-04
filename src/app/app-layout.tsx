@@ -27,9 +27,11 @@ export const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ children })
         target: "_blank"
     };
 
+    const logo = <img className="pf-c-brand" src="/images/logo.png" alt="apicurio-logo" />
+
     const Header = (
         <PageHeader
-            logo="Apicurio Registry (MT)"
+            logo={logo}
             logoProps={logoProps}
             showNavToggle={false}
         />

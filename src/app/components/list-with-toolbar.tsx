@@ -14,6 +14,8 @@ export type ListWithToolbarProps = {
     isLoading: boolean;
     isFiltered: boolean;
     isEmpty: boolean;
+    isError: boolean;
+    errorComponent: React.ReactNode;
     loadingComponent?: React.ReactNode;
     children?: React.ReactNode;
 };
@@ -23,15 +25,16 @@ export type ListWithToolbarProps = {
  * indicated condition is true.
  */
 export const ListWithToolbar: FunctionComponent<ListWithToolbarProps> = (
-    {toolbar, alwaysShowToolbar, emptyState, filteredEmptyState, isLoading, loadingComponent, isEmpty, isFiltered, children}: ListWithToolbarProps) => {
+    {toolbar, alwaysShowToolbar, emptyState, filteredEmptyState, isLoading, loadingComponent, isError, errorComponent, isEmpty, isFiltered, children}: ListWithToolbarProps) => {
 
     return (
         <React.Fragment>
             <If condition={alwaysShowToolbar || !isEmpty || isFiltered} children={toolbar} />
             <IsLoading condition={isLoading} loadingComponent={loadingComponent}>
-                <If condition={!isEmpty} children={children} />
-                <If condition={isEmpty && isFiltered} children={filteredEmptyState} />
-                <If condition={isEmpty && !isFiltered} children={emptyState} />
+                <If condition={isError} children={errorComponent} />
+                <If condition={!isError && !isEmpty} children={children} />
+                <If condition={!isError && isEmpty && isFiltered} children={filteredEmptyState} />
+                <If condition={!isError && isEmpty && !isFiltered} children={emptyState} />
             </IsLoading>
         </React.Fragment>
     );
