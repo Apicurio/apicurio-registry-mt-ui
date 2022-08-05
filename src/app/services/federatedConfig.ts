@@ -140,7 +140,7 @@ export const useFederatedConfig: () => FederatedConfigFactory = (): FederatedCon
             {
                 type: "gettoken",
                 getToken: auth.apicurio_registry.getToken,
-                rbacEnabled: true,
+                rbacEnabled: false,
                 obacEnabled: false
             }
             :
@@ -160,13 +160,12 @@ export const useFederatedConfig: () => FederatedConfigFactory = (): FederatedCon
             features: {
                 alerts,
                 multiTenant: true,
-                roleManagement: true,
+                roleManagement: false,
                 breadcrumbs: false,
                 readOnly: false,
                 settings: true
             }
         };
-        console.debug("Using federated config: ", config);
         return config;
     };
 
