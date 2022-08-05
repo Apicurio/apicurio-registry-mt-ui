@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {Page, PageHeader} from "@patternfly/react-core";
+import {Page, PageHeader, PageHeaderTools} from "@patternfly/react-core";
 import {KeycloakContext} from "@app/auth/keycloak/KeycloakContext";
 import {RegistryMtConfigType, useRegistryMtContext} from "@app/contexts/config";
 
@@ -23,16 +23,24 @@ export const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ children })
     }
 
     const logoProps = {
-        href: "https://github.com/Apicurio/apicurio-registry-mt-ui",
-        target: "_blank"
+        href: "/"
     };
 
-    const logo = <img className="pf-c-brand" src="/images/logo.png" alt="apicurio-logo" />
+    const logout = (): void => {
+        keycloakContext.keycloak?.logout({redirectUri: window.location.href});
+    };
+
+    const logo: React.ReactNode = <img className="pf-c-brand" src="/images/logo.png" alt="apicurio-logo" />
+
+    const headerActions: React.ReactNode = <PageHeaderTools style={{float: "right"}}>
+        <a onClick={logout}>Logout</a>
+    </PageHeaderTools>;
 
     const Header = (
         <PageHeader
             logo={logo}
             logoProps={logoProps}
+            headerTools={headerActions}
             showNavToggle={false}
         />
     );
