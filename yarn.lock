@@ -298,6 +298,13 @@
   dependencies:
     tslib "2.3.1"
 
+"@rhoas/registry-instance-sdk@^0.40.0":
+  version "0.40.0"
+  resolved "https://registry.yarnpkg.com/@rhoas/registry-instance-sdk/-/registry-instance-sdk-0.40.0.tgz#0ff8b60682edb65ab04ac3c9553a3d11303c8bb8"
+  integrity sha512-ZZ8IF8DsdldrEv42kGMrZ7UlrI44DOcv34X4LnyNN5DSqyLnCvlGnVawuLDbiePWGAZ0wsvRjX2qiSyCx50/5g==
+  dependencies:
+    axios "0.27.2"
+
 "@rhoas/registry-management-sdk@0.34.3":
   version "0.34.3"
   resolved "https://registry.yarnpkg.com/@rhoas/registry-management-sdk/-/registry-management-sdk-0.34.3.tgz#27d1fe85897a3d71f86436e16380e09efa160a89"
