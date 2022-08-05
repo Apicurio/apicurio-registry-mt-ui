@@ -7,7 +7,7 @@ RUN yum install -y dos2unix
 
 # Configure certificate and key
 RUN mkdir -p /etc/pki/nginx/private && \
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/pki/nginx/private/server.key -out /etc/pki/nginx/server.crt --batch && \
+    openssl req -x509 -nodes -subj "/C=US/ST=TX/L=Dallas/O=Operate First/OU=IT/CN=*.apps.smaug.na.operate-first.cloud" -days 365 -newkey rsa:2048 -keyout /etc/pki/nginx/private/server.key -out /etc/pki/nginx/server.crt --batch && \
     chown -R 1001:0 /etc/pki/nginx/ && chmod 755 /etc/pki/nginx/private/server.key /etc/pki/nginx/server.crt
     
 # Grant write permission to group
