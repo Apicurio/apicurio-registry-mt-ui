@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import "./registry-instances.css";
-import { ListWithToolbar, NavLink } from "@app/components";
+import {If, ListWithToolbar, NavLink} from "@app/components";
 import { Registry, RegistryStatusValue } from "@rhoas/registry-management-sdk";
 import { ResponsiveTable } from "@rhoas/app-services-ui-components";
 import { AddCircleOIcon, ExclamationTriangleIcon, WarningTriangleIcon, WindowsIcon } from "@patternfly/react-icons";
@@ -37,15 +37,19 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
     const renderRegistryName = (registry: Registry) => {
         if (registry.status && registry.status === RegistryStatusValue.Ready) {
             return <div>
-                <NavLink className="registry-title" location={`/instances/${registry.id}`}>
-                    <Truncate content={registry.name!} tooltipPosition="top" />
-                </NavLink>
-                <Truncate className="registry-summary" content={registry.description!}></Truncate>
+                <div>
+                    <NavLink className="registry-title" location={`/instances/${registry.id}`}>{registry.name!}</NavLink>
+                </div>
+                <If condition={registry.description !== undefined && registry.description.length > 0}>
+                    <Truncate className="registry-summary" content={registry.description!}></Truncate>
+                </If>
             </div>
         } else {
             return <div>
-                <Truncate content={registry.name!} tooltipPosition="top" />
-                <Truncate className="registry-summary" content={registry.description!}></Truncate>
+                <div>{registry.name!}</div>
+                <If condition={registry.description !== undefined && registry.description.length > 0}>
+                    <Truncate className="registry-summary" content={registry.description!}></Truncate>
+                </If>
             </div>
         }
     }

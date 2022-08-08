@@ -1,5 +1,15 @@
 import React, {FunctionComponent, useEffect, useState} from "react";
-import {Button, Form, FormGroup, HelperText, HelperTextItem, Modal, ModalVariant, TextInput} from "@patternfly/react-core";
+import {
+    Alert,
+    Button,
+    Form,
+    FormGroup,
+    HelperText,
+    HelperTextItem,
+    Modal,
+    ModalVariant, TextArea,
+    TextInput
+} from "@patternfly/react-core";
 import {RegistryCreate} from "@rhoas/registry-management-sdk";
 
 export type CreateInstanceModalProps = {
@@ -14,6 +24,10 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
     const [isValid, setValid] = useState(false);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
+    const [nameValidated, setNameValidated] = useState<'success' | 'warning' | 'error' | 'default'>("default");
+    const [nameInvalidText, setNameInvalidText] = useState("");
+    const [descriptionValidated, setDescriptionValidated] = useState<'success' | 'warning' | 'error' | 'default'>("default");
+    const [descriptionInvalidText, setDescriptionInvalidText] = useState("");
 
     const errorMessage = () => {
         if (errorMsg) {
@@ -34,17 +48,48 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
 
     // Validate the form inputs.
     useEffect(() => {
+        setNameValidated("success");
+        setDescriptionValidated("success");
+
         let valid: boolean = true;
         if (!name) {
             valid = false;
+            setNameValidated("error");
+            setNameInvalidText("Name is required.");
+            console.debug("===> name missing");
+        } else {
+            const nameRegexp: RegExp = /^[a-z]([a-z0-9\-]*[a-z0-9])?$/;
+            if (!nameRegexp.test(name)) {
+                setNameValidated("error");
+                setNameInvalidText("Must start with a letter and end with a letter or number. Valid characters include lowercase letters from a to z, numbers from 0 to 9, and hyphens ( - ).");
+                console.debug("===> name invalid regexp");
+                valid = false;
+            } else if (name.length > 32) {
+                setNameValidated("error");
+                setNameInvalidText("Must be at most 32 characters.");
+                console.debug("===> name too long");
+                valid = false;
+            }
         }
+
+        if (description && description.length > 255) {
+            setDescriptionValidated("error");
+            setDescriptionInvalidText("Must be at most 255 characters.");
+            console.debug("===> description too long");
+            valid = false;
+        }
+
         setValid(valid);
-    }, [name]);
+    }, [name, description]);
 
     // Whenever the modal is opened, set default values for the form.
     useEffect(() => {
-        setName("");
-        setDescription("");
+        if (isOpen) {
+            setName("");
+            setDescription("");
+            setNameValidated("default");
+            setDescriptionValidated("default");
+        }
     }, [isOpen]);
 
     return (
@@ -63,7 +108,12 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
             ]}
         >
             <Form>{errorMessage()}
-                <FormGroup label="Name" isRequired={true} fieldId="create-instance-name">
+                <FormGroup label="Name"
+                           isRequired={true}
+                           helperText="Must start with a letter and end with a letter or number. Valid characters include lowercase letters from a to z, numbers from 0 to 9, and hyphens ( - )."
+                           helperTextInvalid={nameInvalidText}
+                           fieldId="create-instance-name"
+                           validated={nameValidated}>
                     <TextInput
                         isRequired
                         type="text"
@@ -74,13 +124,13 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
                         onChange={(value) => {setName(value)}}
                         autoFocus={true}
                     />
-                    <HelperText id="create-instance-name-helper">
-                        <HelperTextItem>Must start with a letter and end with a letter or number. Valid characters include lowercase letters from a to z, numbers from 0 to 9, and hyphens ( - ).</HelperTextItem>
-                    </HelperText>
                 </FormGroup>
-                <FormGroup label="Description" isRequired={false} fieldId="create-instance-description">
-                    <TextInput
-                        type="text"
+                <FormGroup label="Description"
+                           helperTextInvalid={descriptionInvalidText}
+                           isRequired={false}
+                           fieldId="create-instance-description"
+                           validated={descriptionValidated}>
+                    <TextArea
                         id="create-instance-description"
                         name="create-instance-description"
                         aria-describedby="create-instance-description-helper"
