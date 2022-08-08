@@ -56,18 +56,15 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
             valid = false;
             setNameValidated("error");
             setNameInvalidText("Name is required.");
-            console.debug("===> name missing");
         } else {
             const nameRegexp: RegExp = /^[a-z]([a-z0-9\-]*[a-z0-9])?$/;
             if (!nameRegexp.test(name)) {
                 setNameValidated("error");
                 setNameInvalidText("Must start with a letter and end with a letter or number. Valid characters include lowercase letters from a to z, numbers from 0 to 9, and hyphens ( - ).");
-                console.debug("===> name invalid regexp");
                 valid = false;
             } else if (name.length > 32) {
                 setNameValidated("error");
                 setNameInvalidText("Must be at most 32 characters.");
-                console.debug("===> name too long");
                 valid = false;
             }
         }
@@ -75,7 +72,6 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
         if (description && description.length > 255) {
             setDescriptionValidated("error");
             setDescriptionInvalidText("Must be at most 255 characters.");
-            console.debug("===> description too long");
             valid = false;
         }
 
