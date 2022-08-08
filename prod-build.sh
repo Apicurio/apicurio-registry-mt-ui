@@ -25,7 +25,7 @@ mkdir .work
 
   echo "Checkout apicurio-registry"
   echo "--------------------------"
-  git clone --depth 1 --single-branch --branch feat/hackathon https://github.com/Apicurio/apicurio-registry.git
+  git clone --depth 1 --single-branch https://github.com/Apicurio/apicurio-registry.git
 
   (
     cd apicurio-registry/ui
