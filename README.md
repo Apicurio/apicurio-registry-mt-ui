@@ -5,7 +5,7 @@ Registry related components are all running together in a multi-tenant config:
 
 * [Apicurio Registry (multi-tenant enabled)](https://github.com/Apicurio/apicurio-registry)
 * [Service Registry Fleet Manager](https://github.com/bf2fc6cc711aee1a0c2a/srs-fleet-manager)
-* [Apicurio Registry Tenant Manager](https://github.com/Apicurio/apicurio-registry/tree/master/multitenancy)
+* [Apicurio Registry Tenant Manager](https://github.com/Apicurio/apicurio-registry/tree/main/multitenancy)
 
 # Prerequisites
 

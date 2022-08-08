@@ -112,7 +112,7 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
                 Loading instances
             </Title>
         </EmptyState>
-    )
+    );
 
     const emptyState: React.ReactNode = (
         <EmptyState>

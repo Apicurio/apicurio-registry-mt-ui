@@ -30,11 +30,15 @@ export const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ children })
         keycloakContext.keycloak?.logout({redirectUri: window.location.href});
     };
 
-    const logo: React.ReactNode = <img className="pf-c-brand" src="/images/logo.png" alt="apicurio-logo" />
+    const logo: React.ReactNode = <div className="app-logo">
+        <img className="pf-c-brand logo-make" src="/images/logo.png" alt="apicurio-logo" />
+        <span className="logo-model">Registry</span>
+    </div>;
 
-    const headerActions: React.ReactNode = <PageHeaderTools style={{float: "right"}}>
-        <a onClick={logout}>Logout</a>
-    </PageHeaderTools>;
+    const headerActions: React.ReactNode =
+        <PageHeaderTools style={{float: "right"}}>
+            <a onClick={logout}>Logout</a>
+        </PageHeaderTools>;
 
     const Header = (
         <PageHeader
