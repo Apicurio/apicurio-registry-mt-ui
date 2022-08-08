@@ -1,10 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import "@patternfly/react-core/dist/styles/base.css";
-import App from "./app/app";
-import {Services} from "./services";
+import * as React from "react";
+import ReactDOM from "react-dom";
+import App from "@app/index";
 
+if (process.env.NODE_ENV !== "production") {
+  const config = {
+    rules: [
+      {
+        id: "color-contrast",
+        enabled: false,
+      },
+    ],
+  };
+  // eslint-disable-next-line @typescript-eslint/no-var-requires, no-undef
+  const axe = require("react-axe");
+  axe(React, ReactDOM, 1000, config);
+}
 
-const renderApp = () => ReactDOM.render(<App />, document.getElementById("root") as HTMLElement);
-Services.getAuthService().authenticateAndRender(renderApp);
-
+ReactDOM.render(<App />, document.getElementById("root") as HTMLElement);

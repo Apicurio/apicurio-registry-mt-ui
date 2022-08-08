@@ -1,59 +1,76 @@
-# Getting Started with Create React App
+# Apicurio Registry Multi-Tenant UI
+A React web application used when running the Apicurio Registry project in a
+multi-tenant aware configuration.  This UI requires that the following Apicurio
+Registry related components are all running together in a multi-tenant config:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+* [Apicurio Registry (multi-tenant enabled)](https://github.com/Apicurio/apicurio-registry)
+* [Service Registry Fleet Manager](https://github.com/bf2fc6cc711aee1a0c2a/srs-fleet-manager)
+* [Apicurio Registry Tenant Manager](https://github.com/Apicurio/apicurio-registry/tree/master/multitenancy)
 
-## Available Scripts
+# Prerequisites
 
-In the project directory, you can run:
+In order for this app to work, you need to also be running the Apicurio Registry
+UI which provides a set of federated module components that this project uses.
+The UI will fail to load if those are not available.  To run the Apicurio Registry
+UI go here:
 
-### `yarn start`
+https://github.com/Apicurio/apicurio-registry/tree/master/ui
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The Apicurio Registry UI UI should be available on port 8888 (which is the default port
+configured for that project).
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# Build and run (local)
+To run the app locally, do the following:
 
-### `yarn test`
+```bash
+$ yarn install
+$ yarn start:dev
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Then open your browser (if it doesn't automatically open) to:
 
-### `yarn build`
+http://localhost:7777/
 
-Builds the app for production to the `dist` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+By default, `apicurio-registry-mt-ui` will start on localhost with authentication 
+enabled.  This is called the "local" profile and is the default.  However, there are multiple
+profiles supported:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* `local` - the default mode with authentication enabled and local URLs for services (e.g. Fleet Manager)
+* `operate-first` - authentication enabled (via Apicurio SSO) and using Operate First for services (e.g. Fleet Manager)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To run with an alternative profile, set the `REGISTRY_MT_CONFIG` environment
+variable.  So for example:
 
-## Docker Details
+```bash
+$ export REGISTRY_MT_CONFIG=operate-first
+$ yarn start:dev
+```
 
-### Build the docker image
-`docker build -t="apicurio/apicurio-registry-mt-ui:latest" -t="quay.io/apicurio/apicurio-registry-mt-ui:latest" --rm .`
+# Build and Run Docker Image
+To run a production build using docker:
 
-### Run the docker image
-`docker run -it -p 9090:8080 apicurio/apicurio-registry-mt-ui`
+```bash
+$ yarn install
+$ yarn build
+$ docker build -t="apicurio/apicurio-registry-mt-ui" --rm .
+```
 
-Note: you will need to pass some environment variables when running the docker image.  See the table
-below for details:
+## Run the Docker Image
 
-| Name | Description | Example |
-|------|-------------|---------|
-| TENANT_MANAGER_API | URL of the Tenant Manager API. | http://localhost:8585/api/v1 |
-| MT_REGISTRY_APIS   | URL of the Multi-Tenant Apicurio APIs root. | http://localhost:8080/t/:tenantId/apis |
+```bash
+$ docker run -it -p 7777:8080 apicurio/apicurio-registry-mt-ui
+```
+Then open your browser to http://localhost:7777/
 
-### Push the docker image
-If you've made changes to the docker image, you can push it to docker hub using e.g.:
 
-`docker push apicurio/apicurio-registry-mt-ui:latest`
-`docker push quay.io/apicurio/apicurio-registry-mt-ui:latest`
+## Customizing the container
+When running the docker container you can customize it with the following environment
+variables:
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
+* `REGISTRY_UI_URL` - The URL to the `apicurio_registry` federated modules.  Defaults to `http://localhost:8888/apicurio_registry.js`
+* `SRS_API_URL` - The URL to the Service Registry Fleet Manager API.  Defaults to `http://localhost:8081`
+* `AUTH_ENABLED` - Whether to enable Keycloak authentication.  Defaults to `false`
+* `KEYCLOAK_REALM` - The Keycloak realm to use for authentication.  Defaults to `operate-first-apicurio`
+* `KEYCLOAK_URL` - The Keycloak auth URL to use for authentication.  Defaults to `https://auth.apicur.io/auth`
+* `KEYCLOAK_SSL_REQUIRED` - The "SSL required" setting for Keycloak authentication.  Defaults to `external`
+* `KEYCLOAK_RESOURCE` - The Keycloak resource to use for authentication.  Defaults to `sr-ui`

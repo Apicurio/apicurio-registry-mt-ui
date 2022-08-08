@@ -1,0 +1,11 @@
+.instances-panel-body {
+    background-color: var(--pf-c-page__main-section--BackgroundColor);
+}
+
+.instance-drawer-panel-body {
+}
+
+.instance-drawer-panel-body h4 {
+    padding-top: 20px;
+    font-weight: bold;
+}

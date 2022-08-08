@@ -17,7 +17,7 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
 
       - name: Checkout "${{ github.ref }}"
         uses: actions/checkout@v2
@@ -31,6 +31,12 @@ jobs:
           ./prod-build.sh
 
       - name: Push container image
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           docker push quay.io/apicurio/apicurio-registry-mt-ui:latest
+
+      - name: Push container image
+        if: github.event_name == 'push' && github.ref != 'refs/heads/main'
+        run: |
+          docker tag quay.io/apicurio/apicurio-registry-mt-ui:latest quay.io/apicurio/apicurio-registry-mt-ui:${GITHUB_REF##*/}
+          docker push quay.io/apicurio/apicurio-registry-mt-ui:${GITHUB_REF##*/}
