@@ -24,8 +24,9 @@ let filesToCopy = [
 ];
 
 if (devServerConfig.keycloak) {
+  const kcConfigFile = `./configs/${CONFIG}/keycloak.json`;
   filesToCopy.push(
-      { from: "./src/keycloak.dev.json", to: "keycloak.json"}
+      { from: kcConfigFile, to: "keycloak.json"}
   );
 }
 
