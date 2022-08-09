@@ -1,5 +1,10 @@
 import { createContext, useContext } from "react";
 
+export type AppsType = {
+    showNav: boolean;
+    designer: string;
+}
+
 export type FederatedModulesType = {
     registry: string;
 }
@@ -16,6 +21,7 @@ export type RegistryMtConfigType = {
     apis: ApiUrlsType;
     federatedModules: FederatedModulesType;
     auth: AuthType;
+    apps?: AppsType;
 }
 
 export const RegistryMtConfigContext = createContext<RegistryMtConfigType | undefined>(

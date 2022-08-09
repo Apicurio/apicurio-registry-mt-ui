@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {Page, PageHeader, PageHeaderTools} from "@patternfly/react-core";
+import {Nav, NavItem, NavList, PageSidebar, Page, PageHeader, PageHeaderTools} from "@patternfly/react-core";
 import {KeycloakContext} from "@app/auth/keycloak/KeycloakContext";
 import {RegistryMtConfigType, useRegistryMtContext} from "@app/contexts/config";
 
@@ -30,17 +30,20 @@ export const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ children })
         keycloakContext.keycloak?.logout({redirectUri: window.location.href});
     };
 
-    const logo: React.ReactNode = <div className="app-logo">
-        <img className="pf-c-brand logo-make" src="/images/logo.png" alt="apicurio-logo" />
-        <span className="logo-model">Registry</span>
-    </div>;
+    const logo: React.ReactNode = (
+        <div className="app-logo">
+            <img className="pf-c-brand logo-make" src="/images/logo.png" alt="apicurio-logo" />
+            <span className="logo-model">Applications</span>
+        </div>
+    );
 
-    const headerActions: React.ReactNode =
+    const headerActions: React.ReactNode = (
         <PageHeaderTools style={{float: "right"}}>
             <a onClick={logout}>Logout</a>
-        </PageHeaderTools>;
+        </PageHeaderTools>
+    );
 
-    const Header = (
+    const header = (
         <PageHeader
             logo={logo}
             logoProps={logoProps}
@@ -49,8 +52,22 @@ export const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ children })
         />
     );
 
+    const rightNav: React.ReactNode = (
+        <Nav>
+            <NavList>
+                <NavItem to={config?.apps?.designer} itemId="api-designer" isActive={false}>
+                    API Designer
+                </NavItem>
+                <NavItem preventDefault to="#registry" itemId="registry" isActive={true}>
+                    Registry
+                </NavItem>
+            </NavList>
+        </Nav>
+    );
+    const sidebar: React.ReactNode | undefined = config?.apps?.showNav ? <PageSidebar nav={rightNav} isNavOpen={true} /> : undefined;
+
     return (
-        <Page header={Header}>
+        <Page header={header} sidebar={sidebar}>
             {children}
         </Page>
     );

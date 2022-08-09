@@ -7,5 +7,9 @@ const RegistryMtConfig = {
     },
     "auth": {
         "enabled": true
+    },
+    "apps": {
+        "showNav": true,
+        "designer": "https://api-designer-poc.apps.smaug.na.operate-first.cloud/"
     }
 }

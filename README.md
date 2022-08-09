@@ -74,3 +74,5 @@ variables:
 * `KEYCLOAK_URL` - The Keycloak auth URL to use for authentication.  Defaults to `https://auth.apicur.io/auth`
 * `KEYCLOAK_SSL_REQUIRED` - The "SSL required" setting for Keycloak authentication.  Defaults to `external`
 * `KEYCLOAK_RESOURCE` - The Keycloak resource to use for authentication.  Defaults to `sr-ui`
+* `NAV_ENABLED` - Whether to enable the left-hand navigation area. Defaults to `false`
+* `NAV_DESIGNER_URL` - The URL to the Apicurio API Designer UI.  No default value.

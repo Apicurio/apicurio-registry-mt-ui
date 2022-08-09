@@ -27,6 +27,10 @@ echo "const RegistryMtConfig = {
     },
     \"auth\": {
         \"enabled\": $AUTH_ENABLED
+    },
+    \"apps\": {
+        \"showNav\": $NAV_ENABLED,
+        \"designer\": \"$NAV_DESIGNER_URL\"
     }
 }" > /opt/app-root/src/config.js
 
