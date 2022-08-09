@@ -15,3 +15,4 @@ then
 fi
 
 $DOCKER run -it -p 7777:8080 --env AUTH_ENABLED=true --env REGISTRY_UI_URL=http://localhost:7777/modules/registry/apicurio_registry.js apicurio/apicurio-registry-mt-ui:latest
+
