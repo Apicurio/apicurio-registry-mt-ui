@@ -29,6 +29,7 @@ export const init = async (): Promise<void> => {
     if (keycloak) {
       await keycloak.init({
         onLoad: "login-required",
+        checkLoginIframe: false
       });
     }
   } catch {
