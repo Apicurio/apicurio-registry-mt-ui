@@ -30,7 +30,7 @@ mkdir .work
   (
     cd apicurio-registry/ui
     yarn install
-    yarn run build-mtui
+    yarn run build
     echo "Success!"
   )
 )

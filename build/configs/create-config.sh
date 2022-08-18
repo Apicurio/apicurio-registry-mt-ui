@@ -2,7 +2,7 @@
 
 if [ "x$REGISTRY_UI_URL" = "x" ]
 then
-  REGISTRY_UI_URL="http://localhost:8888/apicurio_registry.js"
+  REGISTRY_UI_URL="http://localhost:8888"
 fi
 
 if [ "x$SRS_API_URL" = "x" ]
@@ -15,6 +15,15 @@ then
   AUTH_ENABLED="false"
 fi
 
+if [ "x$NAV_ENABLED" = "x" ]
+then
+  NAV_ENABLED="false"
+fi
+
+if [ "x$NAV_DESIGNER_URL" = "x" ]
+then
+  NAV_DESIGNER_URL=""
+fi
 
 echo "Generating config.js"
 

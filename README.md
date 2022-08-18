@@ -67,7 +67,7 @@ Then open your browser to http://localhost:7777/
 When running the docker container you can customize it with the following environment
 variables:
 
-* `REGISTRY_UI_URL` - The URL to the `apicurio_registry` federated modules.  Defaults to `http://localhost:8888/apicurio_registry.js`
+* `REGISTRY_UI_URL` - The URL to the `apicurio_registry` federated modules.  Defaults to `http://localhost:8888`
 * `SRS_API_URL` - The URL to the Service Registry Fleet Manager API.  Defaults to `http://localhost:8081`
 * `AUTH_ENABLED` - Whether to enable Keycloak authentication.  Defaults to `false`
 * `KEYCLOAK_REALM` - The Keycloak realm to use for authentication.  Defaults to `operate-first-apicurio`

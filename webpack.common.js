@@ -111,29 +111,43 @@ module.exports = (env, argv) => {
           '@apicurio/registry':
               `promise new Promise(resolve => {
                   const cfg = RegistryMtConfig || window.RegistryMtConfig;
-                  var registryUrl = "http://localhost:8888/apicurio_registry.js";
+                  var registryUrl = "http://localhost:8888";
                   console.info("RegistryMtConfig is", cfg);
                   if (cfg && cfg.federatedModules && cfg.federatedModules.registry) {
                       registryUrl = cfg.federatedModules.registry;
                   }
-                  console.info("Loading registry-ui from: " + registryUrl);
+                  const fedModsUrl = registryUrl + "/fed-mods.json";
+                  console.info("Loading registry-ui federated modules from: " + fedModsUrl);
+                  fetch(fedModsUrl)
+                      .then((response) => response.json())
+                      .then((data) => {
+                          console.debug("Fed Mods: ", data);
+                          const registryEntryPoint = data.apicurio_registry.entry[0];
+                          const registryEntryPointUrl = registryUrl + registryEntryPoint;
+        
+                          console.debug("Registry UI entry point URL: ", registryEntryPointUrl);
 
-                  const script = document.createElement('script')
-                  script.src = registryUrl
-                  script.onload = () => {
-                      const proxy = {
-                        get: (request) => window.apicurio_registry.get(request),
-                        init: (arg) => {
-                          try {
-                            return window.apicurio_registry.init(arg)
-                          } catch(e) {
-                            console.log('ADS remote container already initialized')
-                          }
-                        }
-                      }
-                      resolve(proxy)
-                    }
-                    document.head.appendChild(script);
+                          const script = document.createElement("script");
+                          script.src = registryEntryPointUrl;
+                          script.onload = () => {
+                              const proxy = {
+                                  get: (request) => window.apicurio_registry.get(request),
+                                  init: (arg) => {
+                                      try {
+                                          return window.apicurio_registry.init(arg)
+                                      } catch(e) {
+                                          console.log("Registry UI remote container already initialized")
+                                      }
+                                  }
+                              }
+                              resolve(proxy)
+                            }
+                            document.head.appendChild(script);
+                      })
+                      .catch((error) => {
+                          console.debug("Failed to load fed-mods.json: ", JSON.stringify(error));
+                          console.error(error);
+                      });
               })`
         },
         shared: {
