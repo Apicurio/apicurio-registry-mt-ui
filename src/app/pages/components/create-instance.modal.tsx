@@ -1,16 +1,6 @@
-import React, {FunctionComponent, useEffect, useState} from "react";
-import {
-    Alert,
-    Button,
-    Form,
-    FormGroup,
-    HelperText,
-    HelperTextItem,
-    Modal,
-    ModalVariant, TextArea,
-    TextInput
-} from "@patternfly/react-core";
-import {RegistryCreate} from "@rhoas/registry-management-sdk";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { Alert, Button, Form, FormGroup, Modal, ModalVariant, TextArea, TextInput } from "@patternfly/react-core";
+import { RegistryCreate } from "@rhoas/registry-management-sdk";
 
 export type CreateInstanceModalProps = {
     isOpen: boolean|undefined;

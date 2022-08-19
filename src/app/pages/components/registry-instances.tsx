@@ -1,12 +1,24 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import "./registry-instances.css";
-import {If, ListWithToolbar, NavLink} from "@app/components";
+import { If, ListWithToolbar, NavLink } from "@app/components";
 import { Registry, RegistryStatusValue } from "@rhoas/registry-management-sdk";
 import { ResponsiveTable } from "@rhoas/app-services-ui-components";
-import { AddCircleOIcon, ExclamationTriangleIcon, WarningTriangleIcon, WindowsIcon } from "@patternfly/react-icons";
+import { AddCircleOIcon, ExclamationTriangleIcon } from "@patternfly/react-icons";
 import { IAction } from "@patternfly/react-table";
 import { ThProps } from "@patternfly/react-table/src/components/TableComposable/Th";
-import { Button, Card, CardBody, EmptyState, EmptyStateBody, EmptyStateIcon, Title, KebabToggle, Truncate, ToolbarGroup, ToolbarItem, Spinner, EmptyStateVariant } from "@patternfly/react-core";
+import {
+    Button,
+    EmptyState,
+    EmptyStateBody,
+    EmptyStateIcon,
+    EmptyStateVariant,
+    KebabToggle,
+    Spinner,
+    Title,
+    ToolbarGroup,
+    ToolbarItem,
+    Truncate
+} from "@patternfly/react-core";
 import { CustomActionsToggleProps } from "@patternfly/react-table/src/components/Table/ActionsColumn";
 import Moment from "react-moment";
 import { RegistryStatusLabel } from "@app/pages/components";

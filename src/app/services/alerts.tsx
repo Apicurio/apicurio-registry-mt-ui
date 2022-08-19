@@ -1,6 +1,6 @@
-import {AlertVariant, useAlert} from "@rhoas/app-services-ui-shared";
+import { AlertVariant, useAlert } from "@rhoas/app-services-ui-shared";
 import React from "react";
-import {Registry} from "@rhoas/registry-management-sdk";
+import { Registry } from "@rhoas/registry-management-sdk";
 
 
 export interface AlertsService {

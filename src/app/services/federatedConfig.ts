@@ -1,10 +1,10 @@
-import {useParams} from "react-router-dom";
-import {useAlert, useAuth, useBasename} from "@rhoas/app-services-ui-shared";
-import {Basename} from "@rhoas/app-services-ui-shared/dist/esm/contexts/basename/Basename";
-import {Alert} from "@rhoas/app-services-ui-shared/dist/esm/contexts/alert/Alert";
-import {Registry} from "@rhoas/registry-management-sdk";
-import {RegistryMtConfigType, useRegistryMtContext} from "@app/contexts";
-import {Auth} from "@rhoas/app-services-ui-shared/dist/esm/contexts/auth/Auth";
+import { useParams } from "react-router-dom";
+import { useAlert, useAuth, useBasename } from "@rhoas/app-services-ui-shared";
+import { Basename } from "@rhoas/app-services-ui-shared/dist/esm/contexts/basename/Basename";
+import { Alert } from "@rhoas/app-services-ui-shared/dist/esm/contexts/alert/Alert";
+import { Registry } from "@rhoas/registry-management-sdk";
+import { RegistryMtConfigType, useRegistryMtContext } from "@app/contexts";
+import { Auth } from "@rhoas/app-services-ui-shared/dist/esm/contexts/auth/Auth";
 
 export enum AlertVariant {
     success = "success",
@@ -92,9 +92,7 @@ export interface OidcJsAuthConfig extends AuthConfig {
 }
 
 // Used when `type=none`
-export interface NoneAuthConfig extends AuthConfig {
-
-}
+export type NoneAuthConfig = AuthConfig
 
 // Used when `type=gettoken`
 export interface GetTokenAuthConfig extends AuthConfig {
@@ -149,7 +147,7 @@ export const useFederatedConfig: () => FederatedConfigFactory = (): FederatedCon
                 rbacEnabled: false,
                 obacEnabled: false
             };
-        const config: ApicurioRegistryFederatedConfig = {
+        return {
             artifacts: {
                 url: artifactsUrl
             },
@@ -166,7 +164,6 @@ export const useFederatedConfig: () => FederatedConfigFactory = (): FederatedCon
                 settings: true
             }
         };
-        return config;
     };
 
     return {

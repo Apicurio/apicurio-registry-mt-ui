@@ -1,7 +1,19 @@
-import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
-import { Button, Form, FormGroup, Text, Modal, ModalVariant, TextContent, TextInput, Checkbox, TextVariants, Alert, AlertActionLink } from "@patternfly/react-core";
-import { Registry, RegistryCreate } from "@rhoas/registry-management-sdk";
-import { BrowserRouter } from "react-router-dom";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import {
+    Alert,
+    AlertActionLink,
+    Button,
+    Checkbox,
+    Form,
+    FormGroup,
+    Modal,
+    ModalVariant,
+    Text,
+    TextContent,
+    TextInput,
+    TextVariants
+} from "@patternfly/react-core";
+import { Registry } from "@rhoas/registry-management-sdk";
 
 export type DeleteInstanceModalProps = {
     instance: Registry | undefined;

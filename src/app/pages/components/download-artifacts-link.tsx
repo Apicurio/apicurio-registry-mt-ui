@@ -1,7 +1,5 @@
-import { RhosrService } from "@app/services";
 import { Registry } from "@rhoas/registry-management-sdk";
-import React, { Fragment } from "react";
-import { FunctionComponent, useEffect, useState } from "react";
+import React, { Fragment, FunctionComponent, useEffect, useState } from "react";
 import { Text, TextVariants } from "@patternfly/react-core";
 
 export type DownloadArtifactsLinkProps = {

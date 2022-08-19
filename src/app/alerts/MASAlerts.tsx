@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
-import {AlertContext, AlertProps} from "@rhoas/app-services-ui-shared";
-import {MASAlertToastGroup} from "@app/alerts/MASAlertToastGroup";
+import React, { useEffect, useState } from "react";
+import { AlertContext, AlertProps } from "@rhoas/app-services-ui-shared";
+import { MASAlertToastGroup } from "@app/alerts/MASAlertToastGroup";
 
 type TimeOut = {
   key: string | undefined;

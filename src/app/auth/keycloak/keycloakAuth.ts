@@ -9,11 +9,9 @@ export let keycloak: KeycloakInstance | undefined;
  * if keycloak isn't configured
  *
  */
-export const getKeycloakInstance = async (): Promise<
-  KeycloakInstance | undefined
-> => {
-  if (!keycloak) await init();
-  return keycloak;
+export const getKeycloakInstance = async (): Promise<KeycloakInstance | undefined> => {
+    if (!keycloak) await init();
+    return keycloak;
 };
 
 /**
@@ -24,20 +22,20 @@ export const getKeycloakInstance = async (): Promise<
  *
  */
 export const init = async (): Promise<void> => {
-  try {
-    keycloak = Keycloak();
-    if (keycloak) {
-      await keycloak.init({
-        onLoad: "login-required",
-        checkLoginIframe: false
-      });
+    try {
+        keycloak = Keycloak();
+        if (keycloak) {
+            await keycloak.init({
+                onLoad: "login-required",
+                checkLoginIframe: false
+            });
+        }
+    } catch {
+        keycloak = undefined;
+        console.warn(
+            "Auth: Unable to initialize keycloak. Client side will not be configured to use authentication"
+        );
     }
-  } catch {
-    keycloak = undefined;
-    console.warn(
-      "Auth: Unable to initialize keycloak. Client side will not be configured to use authentication"
-    );
-  }
 };
 
 /**
@@ -49,10 +47,10 @@ export const init = async (): Promise<void> => {
  *
  */
 export const getKeyCloakToken = async (): Promise<string> => {
-  await keycloak?.updateToken(50);
-  if (keycloak?.token) return keycloak.token;
-  console.error("No keycloak token available");
-  return "foo";
+    await keycloak?.updateToken(50);
+    if (keycloak?.token) return keycloak.token;
+    console.error("No keycloak token available");
+    return "foo";
 };
 
 /**
@@ -64,12 +62,12 @@ export const getKeyCloakToken = async (): Promise<string> => {
  *
  */
 export const getParsedKeyCloakToken =
-  async (): Promise<KeycloakTokenParsed> => {
-    await keycloak?.updateToken(50);
-    if (keycloak?.tokenParsed) return keycloak.tokenParsed;
-    console.error("No keycloak token available");
-    return {} as KeycloakTokenParsed;
-  };
+    async (): Promise<KeycloakTokenParsed> => {
+        await keycloak?.updateToken(50);
+        if (keycloak?.tokenParsed) return keycloak.tokenParsed;
+        console.error("No keycloak token available");
+        return {} as KeycloakTokenParsed;
+    };
 
 /**
  * logout of keycloak, clear cache and offline store then redirect to
@@ -80,9 +78,9 @@ export const getParsedKeyCloakToken =
  *
  */
 export const logout = async (
-  keycloak: Keycloak.KeycloakInstance | undefined
+    keycloak: Keycloak.KeycloakInstance | undefined
 ): Promise<void> => {
-  if (keycloak) {
-    await keycloak.logout();
-  }
+    if (keycloak) {
+        await keycloak.logout();
+    }
 };

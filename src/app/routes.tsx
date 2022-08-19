@@ -1,12 +1,12 @@
-import React, {ReactElement} from "react";
-import {Route, Switch} from "react-router-dom";
-import {InstancesPage} from "@app/pages/instances";
-import {InstanceArtifactsPage} from "@app/pages/instance-artifacts";
-import {InstanceGlobalRulesPage} from "@app/pages/instance-global-rules";
-import {InstanceRolesPage} from "@app/pages/instance-roles";
-import {InstanceSettingsPage} from "@app/pages/instance-settings";
-import {InstanceArtifactVersionPage} from "@app/pages/instance-artifact-version";
-import {InstanceArtifactRedirectPage} from "@app/pages/instance-artifact";
+import React, { ReactElement } from "react";
+import { Route, Switch } from "react-router-dom";
+import { InstancesPage } from "@app/pages/instances";
+import { InstanceArtifactsPage } from "@app/pages/instance-artifacts";
+import { InstanceGlobalRulesPage } from "@app/pages/instance-global-rules";
+import { InstanceRolesPage } from "@app/pages/instance-roles";
+import { InstanceSettingsPage } from "@app/pages/instance-settings";
+import { InstanceArtifactVersionPage } from "@app/pages/instance-artifact-version";
+import { InstanceArtifactRedirectPage } from "@app/pages/instance-artifact";
 
 
 export const AppRoutes = (): ReactElement => {

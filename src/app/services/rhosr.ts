@@ -1,9 +1,8 @@
-import {Configuration, RegistriesApi, Registry, RegistryCreate, RegistryList} from '@rhoas/registry-management-sdk';
-import { AdminApi } from "@rhoas/registry-instance-sdk"
-import {Auth, useAuth} from "@rhoas/app-services-ui-shared";
-import {RegistryMtConfigType, useRegistryMtContext} from "@app/contexts/config";
-import {LocalStorageService, useLocalStorageService} from "@app/services/local-storage";
-import { AudioHTMLAttributes } from 'react';
+import { Configuration, RegistriesApi, Registry, RegistryCreate, RegistryList } from "@rhoas/registry-management-sdk";
+import { AdminApi } from "@rhoas/registry-instance-sdk";
+import { Auth, useAuth } from "@rhoas/app-services-ui-shared";
+import { RegistryMtConfigType, useRegistryMtContext } from "@app/contexts/config";
+import { LocalStorageService, useLocalStorageService } from "@app/services/local-storage";
 
 
 /**
@@ -23,7 +22,12 @@ async function getRegistries(auth: Auth, basePath: string): Promise<Registry[]> 
     );
     return api.getRegistries().then(res => {
         const registries: RegistryList = res?.data;
-        return registries.items?.sort((r1, r2) => {return r1.name!.localeCompare(r2.name!)});
+        return registries.items?.sort((r1, r2) => {
+            if (r1.name && r2.name) {
+                return r1.name.localeCompare(r2.name);
+            }
+            return 1;
+        });
     });
 }
 
@@ -98,13 +102,13 @@ async function getExportDownloadUrlForRegistry(auth: Auth, basePath: string, ins
 
     const instanceApi = new AdminApi(
         new Configuration({
-        accessToken: token,
-        basePath: instance.registryUrl + "/apis/registry/v2",
-      })
+            accessToken: token,
+            basePath: instance.registryUrl + "/apis/registry/v2"
+        })
     );
     return instanceApi.exportData(true).then(res => {
         return res?.data?.href as string;
-    })
+    });
 }
 
 

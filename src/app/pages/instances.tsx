@@ -1,4 +1,4 @@
-import React, {FunctionComponent, ReactNode, useEffect, useRef, useState} from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import "./instances.css";
 import {
     ClipboardCopy,
@@ -18,10 +18,10 @@ import {
     Title,
     TitleSizes
 } from "@patternfly/react-core";
-import {Registry, RegistryCreate, RegistryStatusValue} from '@rhoas/registry-management-sdk';
-import {CreateInstanceModal, RegistryInstances} from "@app/pages/components";
-import {RhosrService, useInterval, useRhosrService} from "@app/services";
-import {AlertsService, useAlertsService} from "@app/services/alerts";
+import { Registry, RegistryCreate, RegistryStatusValue } from "@rhoas/registry-management-sdk";
+import { CreateInstanceModal, RegistryInstances } from "@app/pages/components";
+import { RhosrService, useInterval, useRhosrService } from "@app/services";
+import { AlertsService, useAlertsService } from "@app/services/alerts";
 import { DeleteInstanceModal } from "./components/delete-instance.modal";
 import { DownloadArtifactsLink } from "./components/download-artifacts-link";
 
@@ -84,7 +84,7 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
             if (callback) {
                 callback();
             }
-        }).catch(error => { 
+        }).catch(error => {
             console.error("[RegistryInstances] Error getting registries: ", error);
             setInstances(undefined);
             if (callback) {

@@ -1,6 +1,6 @@
-import React, {FunctionComponent} from "react";
-import {Registry, RegistryStatusValue} from "@rhoas/registry-management-sdk";
-import {Label} from "@patternfly/react-core";
+import React, { FunctionComponent } from "react";
+import { Registry, RegistryStatusValue } from "@rhoas/registry-management-sdk";
+import { Label } from "@patternfly/react-core";
 
 export type RegistryStatusLabelProps = {
     registry: Registry|undefined;

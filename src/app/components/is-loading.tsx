@@ -1,5 +1,5 @@
-import React, {FunctionComponent} from "react";
-import {Spinner} from "@patternfly/react-core";
+import React, { FunctionComponent } from "react";
+import { Spinner } from "@patternfly/react-core";
 
 /**
  * Properties

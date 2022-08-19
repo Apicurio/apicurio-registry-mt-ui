@@ -1,6 +1,6 @@
-import React, {FunctionComponent, useEffect, useState} from "react";
-import {Select, SelectOption, SelectVariant} from "@patternfly/react-core";
-import {SelectOptionObject} from "@patternfly/react-core/src/components/Select/SelectOption";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { Select, SelectOption, SelectVariant } from "@patternfly/react-core";
+import { SelectOptionObject } from "@patternfly/react-core/src/components/Select/SelectOption";
 
 interface ObjectSelectOptionObject extends SelectOptionObject {
     item: any;

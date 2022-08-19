@@ -1,9 +1,9 @@
-import React, {FunctionComponent, useEffect, useState} from "react";
-import {Breadcrumb, BreadcrumbItem, PageSection, PageSectionVariants} from "@patternfly/react-core";
-import {IsLoading, NavLink} from "@app/components";
-import {useHistory, useParams} from "react-router-dom";
-import {FederatedConfigFactory, RhosrService, useFederatedConfig, useRhosrService} from "@app/services";
-import {Registry} from "@rhoas/registry-management-sdk";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { Breadcrumb, BreadcrumbItem, PageSection, PageSectionVariants } from "@patternfly/react-core";
+import { IsLoading, NavLink } from "@app/components";
+import { useHistory, useParams } from "react-router-dom";
+import { FederatedConfigFactory, RhosrService, useFederatedConfig, useRhosrService } from "@app/services";
+import { Registry } from "@rhoas/registry-management-sdk";
 
 // @ts-ignore
 const FederatedSettingsPage = React.lazy(() => import("@apicurio/registry/FederatedSettingsPage"));

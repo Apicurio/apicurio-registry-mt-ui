@@ -1,7 +1,6 @@
-import React, {FunctionComponent} from "react";
-import {IsLoading} from "@app/components/is-loading";
-import {If} from "@app/components/if";
-import {IfNotEmpty} from "@app/components/if-not-empty";
+import React, { FunctionComponent } from "react";
+import { IsLoading } from "@app/components/is-loading";
+import { If } from "@app/components/if";
 
 /**
  * Properties

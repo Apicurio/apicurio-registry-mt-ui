@@ -1,8 +1,8 @@
-import React, {FunctionComponent, useEffect, useState} from "react";
-import {IsLoading} from "@app/components";
-import {useHistory, useParams} from "react-router-dom";
-import {FederatedConfigFactory, RhosrService, useFederatedConfig, useRhosrService} from "@app/services";
-import {Registry} from "@rhoas/registry-management-sdk";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { IsLoading } from "@app/components";
+import { useHistory, useParams } from "react-router-dom";
+import { FederatedConfigFactory, RhosrService, useFederatedConfig, useRhosrService } from "@app/services";
+import { Registry } from "@rhoas/registry-management-sdk";
 
 // @ts-ignore
 const FederatedArtifactRedirectPage = React.lazy(() => import("@apicurio/registry/FederatedArtifactRedirectPage"));

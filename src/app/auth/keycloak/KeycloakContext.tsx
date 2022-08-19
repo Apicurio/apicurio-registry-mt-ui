@@ -1,11 +1,8 @@
-import React, {FunctionComponent, createContext} from "react";
-import {KeycloakInstance, KeycloakProfile} from "keycloak-js";
-import {
-    getKeyCloakToken,
-    getParsedKeyCloakToken,
-} from "@app/auth/keycloak/keycloakAuth";
-import {Auth, AuthContext} from "@rhoas/app-services-ui-shared";
-import {RegistryMtConfigType, useRegistryMtContext} from "@app/contexts/config";
+import React, { createContext, FunctionComponent } from "react";
+import { KeycloakInstance, KeycloakProfile } from "keycloak-js";
+import { getKeyCloakToken, getParsedKeyCloakToken, } from "@app/auth/keycloak/keycloakAuth";
+import { Auth, AuthContext } from "@rhoas/app-services-ui-shared";
+import { RegistryMtConfigType, useRegistryMtContext } from "@app/contexts/config";
 
 // This is a context which can manage the keycloak
 export interface IKeycloakContext {

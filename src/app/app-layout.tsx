@@ -1,7 +1,7 @@
-import React, {useContext} from "react";
-import {Nav, NavItem, NavList, PageSidebar, Page, PageHeader, PageHeaderTools} from "@patternfly/react-core";
-import {KeycloakContext} from "@app/auth/keycloak/KeycloakContext";
-import {RegistryMtConfigType, useRegistryMtContext} from "@app/contexts/config";
+import React, { useContext } from "react";
+import { Nav, NavItem, NavList, Page, PageHeader, PageHeaderTools, PageSidebar } from "@patternfly/react-core";
+import { KeycloakContext } from "@app/auth/keycloak/KeycloakContext";
+import { RegistryMtConfigType, useRegistryMtContext } from "@app/contexts/config";
 
 export type AppLayoutProps = {
     children?: React.ReactNode;
