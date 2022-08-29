@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 import "./registry-instances.css";
 import { If, ListWithToolbar, NavLink } from "@app/components";
 import { Registry, RegistryStatusValue } from "@rhoas/registry-management-sdk";
@@ -37,7 +37,7 @@ export type RegistryInstancesProps = {
 export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
     { isLoadingInstances, instances, selectedInstance, onInstanceSelected, onCreateInstanceClick, onDeleteInstanceClick }: RegistryInstancesProps) => {
 
-    const [sortByIndex, setSortByIndex] = useState<number>();
+    //const [sortByIndex, setSortByIndex] = useState<number>();
 
     const columns: any[] = [
         { index: 0, id: "name", label: "Name", width: 30, sortable: false },
@@ -48,23 +48,27 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
 
     const renderRegistryName = (registry: Registry) => {
         if (registry.status && registry.status === RegistryStatusValue.Ready) {
-            return <div>
+            return (
                 <div>
-                    <NavLink className="registry-title" location={`/instances/${registry.id}`}>{registry.name!}</NavLink>
+                    <div>
+                        <NavLink className="registry-title" location={`/instances/${registry.id}`}>{registry.name}</NavLink>
+                    </div>
+                    <If condition={registry.description !== undefined && registry.description.length > 0}>
+                        <Truncate className="registry-summary" content={registry.description || ""}></Truncate>
+                    </If>
                 </div>
-                <If condition={registry.description !== undefined && registry.description.length > 0}>
-                    <Truncate className="registry-summary" content={registry.description!}></Truncate>
-                </If>
-            </div>
+            );
         } else {
-            return <div>
-                <div>{registry.name!}</div>
-                <If condition={registry.description !== undefined && registry.description.length > 0}>
-                    <Truncate className="registry-summary" content={registry.description!}></Truncate>
-                </If>
-            </div>
+            return (
+                <div>
+                    <div>{registry.name}</div>
+                    <If condition={registry.description !== undefined && registry.description.length > 0}>
+                        <Truncate className="registry-summary" content={registry.description || ""}></Truncate>
+                    </If>
+                </div>
+            );
         }
-    }
+    };
 
     const renderColumnData = (registry: Registry, colIndex: number): React.ReactNode => {
         // Name.
@@ -73,26 +77,36 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
         }
         // Owner.
         if (colIndex === 1) {
-            return <Truncate content={registry.owner!} tooltipPosition="top" />
+            return (
+                <Truncate content={registry.owner || ""} tooltipPosition="top" />
+            );
         }
         // Status.
         if (colIndex === 2) {
-            return <RegistryStatusLabel registry={registry} />;
+            return (
+                <RegistryStatusLabel registry={registry} />
+            );
         }
         // Created At.
         if (colIndex === 3) {
-            return <Moment date={registry.created_at} fromNow={true} />
+            return (
+                <Moment date={registry.created_at} fromNow={true} />
+            );
         }
-        return <span />
+        return (
+            <span />
+        );
     };
 
     const renderActionsToggle = (props: CustomActionsToggleProps): React.ReactNode => {
-        return <KebabToggle isDisabled={props.isDisabled} isOpen={props.isOpen} onToggle={(value, event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            props.onToggle(value);
-        }} />
-    }
+        return (
+            <KebabToggle isDisabled={props.isDisabled} isOpen={props.isOpen} onToggle={(value, event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                props.onToggle(value);
+            }} />
+        );
+    };
 
     const actionsFor = (registry: any): IAction[] => {
         return [
@@ -100,12 +114,12 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
             { isSeparator: true, },
             {
                 title: "Delete", onClick: (event) => {
-                    onDeleteInstanceClick(registry)
-                    event.stopPropagation()
+                    onDeleteInstanceClick(registry);
+                    event.stopPropagation();
                 }
             },
         ];
-    }
+    };
 
     const sortParams = (column: any): ThProps["sort"] | undefined => {
         return column.sortable ? {
@@ -140,8 +154,8 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
     );
 
     const reloadPage = () => {
-        window.location.reload()
-    }
+        window.location.reload();
+    };
 
     const errorState: React.ReactNode = (
         <EmptyState variant={EmptyStateVariant.large}>
@@ -154,7 +168,7 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
             </EmptyStateBody>
             <Button variant="primary" onClick={reloadPage}>Reload page</Button>
         </EmptyState>
-    )
+    );
 
     const toolbar: React.ReactNode = (
         <ToolbarGroup>
@@ -181,18 +195,18 @@ export const RegistryInstances: FunctionComponent<RegistryInstancesProps> = (
                     expectedLength={instances?.length}
                     minimumColumnWidth={350}
                     onRowClick={(row) => onInstanceSelected(row.row.id === selectedInstance?.id ? undefined : row.row)}
-                    renderHeader={({ column, Th, key }) => (
+                    renderHeader={({ column, Th }) => (
                         <Th sort={sortParams(column)}
                             className="design-list-header"
                             key={`header-${column.id}`}
                             width={column.width}
                             modifier="truncate">{column.label}</Th>
                     )}
-                    renderCell={({ column, row, colIndex, Td, key }) => (
+                    renderCell={({ row, colIndex, Td }) => (
                         <Td className="design-list-cell" key={`cell-${colIndex}-${row.id}`} children={renderColumnData(row as Registry, colIndex)} />
                     )}
                     renderActions={({ row, ActionsColumn }) => (
-                        <ActionsColumn key={`actions-${row['id']}`}
+                        <ActionsColumn key={`actions-${row["id"]}`}
                             actionsToggle={renderActionsToggle}
                             items={actionsFor(row)} />
                     )}

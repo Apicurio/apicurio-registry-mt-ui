@@ -31,12 +31,12 @@ export const DeleteInstanceModal: FunctionComponent<DeleteInstanceModalProps> = 
     // Called when the user clicks the Create button in the modal
     const doDelete = (): void => {
         if (!instance) return;
-        onDelete(instance)
+        onDelete(instance);
     };
 
     const onDownload = (): void => {
         setDownloaded(true);
-    }
+    };
 
     // Validate the form inputs.
     useEffect(() => {
@@ -54,7 +54,7 @@ export const DeleteInstanceModal: FunctionComponent<DeleteInstanceModalProps> = 
         setUnderstand(false);
     }, [instance]);
 
-    const checkboxText = !downloaded ? "I don't need to download artifacts from this instance, and I understand they will be permanently deleted." : "I understand that the artifacts zip file might not download successfully if I permanently delete the instance before the download is complete."
+    const checkboxText = !downloaded ? "I don't need to download artifacts from this instance, and I understand they will be permanently deleted." : "I understand that the artifacts zip file might not download successfully if I permanently delete the instance before the download is complete.";
 
     return (
         <Modal
@@ -97,7 +97,7 @@ export const DeleteInstanceModal: FunctionComponent<DeleteInstanceModalProps> = 
                         id="delete-instance-verify-name"
                         name="delete-instance-verify-name"
                         value={nameVerify}
-                        onChange={(value) => { setNameVerify(value) }}
+                        onChange={(value) => { setNameVerify(value); }}
                     />
                 </FormGroup>
 

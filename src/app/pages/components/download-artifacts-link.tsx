@@ -13,16 +13,20 @@ export const DownloadArtifactsLink: FunctionComponent<DownloadArtifactsLinkProps
 
     useEffect(() => {
         getExportDownloadUrlForRegistry(instance).then(hrf => {
-            setHref(hrf)
-            console.log(hrf)
-        })
-    }, [getExportDownloadUrlForRegistry, instance])
+            setHref(hrf);
+            console.log(hrf);
+        });
+    }, [getExportDownloadUrlForRegistry, instance]);
 
-    if (!href) return <Fragment />
+    if (!href) {
+        return (
+            <Fragment />
+        );
+    }
 
     return (
         <Text component={TextVariants.a} href={`${instance.registryUrl}${href}/${instance.name}`}>
             {label}
         </Text>
-    )
-}
+    );
+};

@@ -7,7 +7,7 @@ export type RegistryStatusLabelProps = {
 };
 
 
-export const RegistryStatusLabel: FunctionComponent<RegistryStatusLabelProps> = ({registry}: RegistryStatusLabelProps) => {
+export const RegistryStatusLabel: FunctionComponent<RegistryStatusLabelProps> = ({ registry }: RegistryStatusLabelProps) => {
 
     const label = (): string => {
         if (registry) {

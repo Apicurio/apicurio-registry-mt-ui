@@ -25,10 +25,10 @@ import { AlertsService, useAlertsService } from "@app/services/alerts";
 import { DeleteInstanceModal } from "./components/delete-instance.modal";
 import { DownloadArtifactsLink } from "./components/download-artifacts-link";
 
-export type InstancesPageProps = {
-};
+// No page properties needed.
+export type InstancesPageProps = Record<string, never>;
 
-export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: InstancesPageProps) => {
+export const InstancesPage: FunctionComponent<InstancesPageProps> = () => {
     const [ isLoading, setLoading ] = useState(false);
     const [ isDrawerExpanded, setDrawerExpanded ] = useState(false);
     const [ instances, setInstances ] = useState<Registry[]>();
@@ -62,21 +62,21 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
     const doDeleteInstance = (): void => {
         if (!instanceToDelete) return;
 
-        const instance = instanceToDelete
+        const instance = instanceToDelete;
         setInstanceToDelete(undefined);
 
         rhosr.deleteRegistry(instance.id).then(() => {
-            alerts.instanceDeleted(instance)
+            alerts.instanceDeleted(instance);
             refresh();
         }).catch(error => {
-            alerts.instanceDeleteError(instance)
+            alerts.instanceDeleteError(instance);
             console.error("Error deleting registry: ", error);
         });
-    }
+    };
 
     const renderDownloadArtifacts = (instance: Registry, label: string) : React.ReactNode => {
-        return <DownloadArtifactsLink label={label} instance={instance} getExportDownloadUrlForRegistry={rhosr.getExportDownloadUrlForRegistry}/>
-    }
+        return <DownloadArtifactsLink label={label} instance={instance} getExportDownloadUrlForRegistry={rhosr.getExportDownloadUrlForRegistry}/>;
+    };
 
     const refresh = (callback?: () => void): void => {
         rhosr.getRegistries().then(data => {
@@ -112,7 +112,7 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
                     </Text>
                     <Title
                         headingLevel="h2"
-                        size={TitleSizes['xl']}
+                        size={TitleSizes["xl"]}
                         className="pf-u-mt-0"
                     >
                         <div className="instance-details-header">
@@ -130,7 +130,7 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
             <DrawerPanelBody className="instance-drawer-panel-body">
                 <Title
                     headingLevel="h3"
-                    size={TitleSizes['l']}
+                    size={TitleSizes["l"]}
                     className="pf-u-mt-0"
                 ><div>Connection</div></Title>
                 <Text component={TextVariants.small} className="pf-u-mb-0">
@@ -139,7 +139,7 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
 
                 <Title
                     headingLevel="h4"
-                    size={TitleSizes['s']}
+                    size={TitleSizes["s"]}
                     className="pf-u-mt-0"
                 >Core Registry API</Title>
                 <ClipboardCopy isReadOnly hoverTip="Copy" clickTip="Copied">
@@ -148,7 +148,7 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
 
                 <Title
                     headingLevel="h4"
-                    size={TitleSizes['s']}
+                    size={TitleSizes["s"]}
                     className="pf-u-mt-0"
                 >Schema Registry compatibility API</Title>
                 <ClipboardCopy isReadOnly hoverTip="Copy" clickTip="Copied">
@@ -157,7 +157,7 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
 
                 <Title
                     headingLevel="h4"
-                    size={TitleSizes['s']}
+                    size={TitleSizes["s"]}
                     className="pf-u-mt-0"
                 >CNCF Schema Registry API</Title>
                 <ClipboardCopy isReadOnly hoverTip="Copy" clickTip="Copied">
@@ -183,33 +183,32 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
                         </PageSection>
                         <PageSection variant={PageSectionVariants.default} isFilled={true}>
                             <RegistryInstances instances={instances}
-                                               isLoadingInstances={isLoading}
-                                               selectedInstance={selectedInstance}
-                                               onCreateInstanceClick={() => {
-                                                   setCreateError(undefined);
-                                                   setCreateModalOpen(true);
-                                               }}
-                                               onDeleteInstanceClick={(instance) => {
-                                                    setInstanceToDelete(instance);
-                                                    console.debug("[InstancesPage] TODO: Instance should be deleted: ", instance);
-                                               }}
-                                               onInstanceSelected={(instance) => {
-                                                    console.debug("[InstancesPage] Instance selected: ", instance, selectedInstance);
-                                                    if (!instance) {
-                                                        setDrawerExpanded(false);
-                                                        setSelectedInstance(undefined);
-                                                    } else if (instance.status === RegistryStatusValue.Ready) {
-                                                        setSelectedInstance(instance);
-                                                        setDrawerExpanded(true);
-                                                    }
-                                               }} />
+                                isLoadingInstances={isLoading}
+                                selectedInstance={selectedInstance}
+                                onCreateInstanceClick={() => {
+                                    setCreateError(undefined);
+                                    setCreateModalOpen(true);
+                                }}
+                                onDeleteInstanceClick={(instance) => {
+                                    setInstanceToDelete(instance);
+                                    console.debug("[InstancesPage] TODO: Instance should be deleted: ", instance);
+                                }}
+                                onInstanceSelected={(instance) => {
+                                    console.debug("[InstancesPage] Instance selected: ", instance, selectedInstance);
+                                    if (!instance) {
+                                        setDrawerExpanded(false);
+                                        setSelectedInstance(undefined);
+                                    } else if (instance.status === RegistryStatusValue.Ready) {
+                                        setSelectedInstance(instance);
+                                        setDrawerExpanded(true);
+                                    }
+                                }} />
                         </PageSection>
                     </DrawerContentBody>
                 </DrawerContent>
             </Drawer>
-            <CreateInstanceModal isOpen={isCreateModalOpen} errorMsg={createError} onCreate={doCreateInstance} onCancel={() => {setCreateModalOpen(false)}}/>
-            <DeleteInstanceModal instance={instanceToDelete} renderDownloadArtifacts={renderDownloadArtifacts} onDelete={doDeleteInstance} onCancel={() => {setInstanceToDelete(undefined)}}/>
+            <CreateInstanceModal isOpen={isCreateModalOpen} errorMsg={createError} onCreate={doCreateInstance} onCancel={() => {setCreateModalOpen(false);}}/>
+            <DeleteInstanceModal instance={instanceToDelete} renderDownloadArtifacts={renderDownloadArtifacts} onDelete={doDeleteInstance} onCancel={() => {setInstanceToDelete(undefined);}}/>
         </React.Fragment>
     );
-}
-
+};

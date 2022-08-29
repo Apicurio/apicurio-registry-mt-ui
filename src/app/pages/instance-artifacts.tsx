@@ -5,13 +5,13 @@ import { useHistory, useParams } from "react-router-dom";
 import { FederatedConfigFactory, RhosrService, useFederatedConfig, useRhosrService } from "@app/services";
 import { Registry } from "@rhoas/registry-management-sdk";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const FederatedArtifactsPage = React.lazy(() => import("@apicurio/registry/FederatedArtifactsPage"));
 
-export type InstanceArtifactsPageProps = {
-};
+export type InstanceArtifactsPageProps = Record<string, unknown>;
 
-export const InstanceArtifactsPage: FunctionComponent<InstanceArtifactsPageProps> = ({}: InstanceArtifactsPageProps) => {
+export const InstanceArtifactsPage: FunctionComponent<InstanceArtifactsPageProps> = () => {
     const [ isLoading, setLoading ] = useState<boolean>(true);
     const [ registry, setRegistry ] = useState<Registry>();
 
@@ -30,7 +30,7 @@ export const InstanceArtifactsPage: FunctionComponent<InstanceArtifactsPageProps
         }).catch(error => {
             // TODO handle errors here
             console.error(`Error loading registry with id ${instanceId}: `, error);
-        })
+        });
     }, []);
 
     return (
@@ -48,4 +48,4 @@ export const InstanceArtifactsPage: FunctionComponent<InstanceArtifactsPageProps
             </IsLoading>
         </React.Fragment>
     );
-}
+};

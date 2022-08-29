@@ -27,7 +27,7 @@ export const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ children })
     };
 
     const logout = (): void => {
-        keycloakContext.keycloak?.logout({redirectUri: window.location.href});
+        keycloakContext.keycloak?.logout({ redirectUri: window.location.href });
     };
 
     const logo: React.ReactNode = (
@@ -38,7 +38,7 @@ export const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ children })
     );
 
     const headerActions: React.ReactNode = (
-        <PageHeaderTools style={{float: "right"}}>
+        <PageHeaderTools style={{ float: "right" }}>
             <a onClick={logout}>Logout</a>
         </PageHeaderTools>
     );
@@ -71,5 +71,5 @@ export const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ children })
             {children}
         </Page>
     );
-}
+};
 
