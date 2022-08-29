@@ -5,13 +5,13 @@ import { useHistory, useParams } from "react-router-dom";
 import { FederatedConfigFactory, RhosrService, useFederatedConfig, useRhosrService } from "@app/services";
 import { Registry } from "@rhoas/registry-management-sdk";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const FederatedRolesPage = React.lazy(() => import("@apicurio/registry/FederatedRolesPage"));
 
-export type InstanceRolesPageProps = {
-};
+export type InstanceRolesPageProps = Record<string, unknown>;
 
-export const InstanceRolesPage: FunctionComponent<InstanceRolesPageProps> = ({}: InstanceRolesPageProps) => {
+export const InstanceRolesPage: FunctionComponent<InstanceRolesPageProps> = () => {
     const [ isLoading, setLoading ] = useState<boolean>(true);
     const [ registry, setRegistry ] = useState<Registry>();
 
@@ -30,7 +30,7 @@ export const InstanceRolesPage: FunctionComponent<InstanceRolesPageProps> = ({}:
         }).catch(error => {
             // TODO handle errors here
             console.error(`Error loading registry with id ${instanceId}: `, error);
-        })
+        });
     }, []);
 
     return (
@@ -48,4 +48,4 @@ export const InstanceRolesPage: FunctionComponent<InstanceRolesPageProps> = ({}:
             </IsLoading>
         </React.Fragment>
     );
-}
+};

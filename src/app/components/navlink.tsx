@@ -9,12 +9,12 @@ export type NavLinkProps = {
     children?: React.ReactNode;
 }
 
-export const NavLink: FunctionComponent<NavLinkProps> = ({location, title, className, children}: NavLinkProps) => {
+export const NavLink: FunctionComponent<NavLinkProps> = ({ location, title, className, children }: NavLinkProps) => {
 
     const basename: Basename = useBasename();
     const to: string = `${basename.getBasename()}${location}`;
 
     return (
-        <Link className={className} title={title} to={to} children={children} />
+        <Link className={className} title={title} to={to} children={children}/>
     );
 };

@@ -21,11 +21,11 @@ import { BasenameContext } from "@rhoas/app-services-ui-shared";
 
 
 let keycloak: Keycloak.KeycloakInstance | undefined;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const apiDesignerConfig: RegistryMtConfigType = RegistryMtConfig || window["RegistryMtConfig"];
 
-
-const App: React.FunctionComponent = () => {
+const App: () => (React.ReactElement<any, string | React.JSXElementConstructor<any>> | Record<string, unknown>) = () => {
     const [initialized, setInitialized] = useState(false);
 
     const loadingState: React.ReactNode = (
@@ -35,7 +35,7 @@ const App: React.FunctionComponent = () => {
                 Loading
             </Title>
         </EmptyState>
-    )
+    );
 
     // Initialize Keycloak
     useEffect(() => {
@@ -53,10 +53,10 @@ const App: React.FunctionComponent = () => {
     if (!initialized) return loadingState;
 
     return (
-        <BasenameContext.Provider value={{getBasename: () => ""}}>
+        <BasenameContext.Provider value={{ getBasename: () => "" }}>
             <AlertProvider>
                 <RegistryMtConfigContext.Provider value={apiDesignerConfig}>
-                    <KeycloakContext.Provider value={{keycloak, profile: keycloak?.profile}}>
+                    <KeycloakContext.Provider value={{ keycloak, profile: keycloak?.profile }}>
                         <KeycloakAuthProvider>
                             <Router>
                                 <React.Suspense fallback={<Spinner/>}>
@@ -71,6 +71,6 @@ const App: React.FunctionComponent = () => {
             </AlertProvider>
         </BasenameContext.Provider>
     );
-}
+};
 
 export default App;

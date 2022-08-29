@@ -21,6 +21,7 @@ export type KeycloakAuthProviderProps = {
 export const KeycloakAuthProvider: FunctionComponent<KeycloakAuthProviderProps> = (props) => {
     const config: RegistryMtConfigType | undefined = useRegistryMtContext();
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const noAuth: Auth = {};
 

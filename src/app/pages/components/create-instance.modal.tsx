@@ -10,13 +10,13 @@ export type CreateInstanceModalProps = {
 }
 
 
-export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = ({isOpen, errorMsg, onCreate, onCancel}: CreateInstanceModalProps) => {
+export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = ({ isOpen, errorMsg, onCreate, onCancel }: CreateInstanceModalProps) => {
     const [isValid, setValid] = useState(false);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [nameValidated, setNameValidated] = useState<'success' | 'warning' | 'error' | 'default'>("default");
+    const [nameValidated, setNameValidated] = useState<"success" | "warning" | "error" | "default">("default");
     const [nameInvalidText, setNameInvalidText] = useState("");
-    const [descriptionValidated, setDescriptionValidated] = useState<'success' | 'warning' | 'error' | 'default'>("default");
+    const [descriptionValidated, setDescriptionValidated] = useState<"success" | "warning" | "error" | "default">("default");
     const [descriptionInvalidText, setDescriptionInvalidText] = useState("");
 
     const errorMessage = () => {
@@ -25,7 +25,7 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
         } else {
             return null;
         }
-     }
+    };
 
     // Called when the user clicks the Create button in the modal
     const doCreate = (): void => {
@@ -47,7 +47,7 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
             setNameValidated("error");
             setNameInvalidText("Name is required.");
         } else {
-            const nameRegexp: RegExp = /^[a-z]([a-z0-9\-]*[a-z0-9])?$/;
+            const nameRegexp: RegExp = /^[a-z]([a-z0-9-]*[a-z0-9])?$/;
             if (!nameRegexp.test(name)) {
                 setNameValidated("error");
                 setNameInvalidText("Must start with a letter and end with a letter or number. Valid characters include lowercase letters from a to z, numbers from 0 to 9, and hyphens ( - ).");
@@ -95,11 +95,11 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
         >
             <Form>{errorMessage()}
                 <FormGroup label="Name"
-                           isRequired={true}
-                           helperText="Must start with a letter and end with a letter or number. Valid characters include lowercase letters from a to z, numbers from 0 to 9, and hyphens ( - )."
-                           helperTextInvalid={nameInvalidText}
-                           fieldId="create-instance-name"
-                           validated={nameValidated}>
+                    isRequired={true}
+                    helperText="Must start with a letter and end with a letter or number. Valid characters include lowercase letters from a to z, numbers from 0 to 9, and hyphens ( - )."
+                    helperTextInvalid={nameInvalidText}
+                    fieldId="create-instance-name"
+                    validated={nameValidated}>
                     <TextInput
                         isRequired
                         type="text"
@@ -107,21 +107,21 @@ export const CreateInstanceModal: FunctionComponent<CreateInstanceModalProps> = 
                         name="create-instance-name"
                         aria-describedby="create-instance-name-helper"
                         value={name}
-                        onChange={(value) => {setName(value)}}
+                        onChange={(value) => {setName(value);}}
                         autoFocus={true}
                     />
                 </FormGroup>
                 <FormGroup label="Description"
-                           helperTextInvalid={descriptionInvalidText}
-                           isRequired={false}
-                           fieldId="create-instance-description"
-                           validated={descriptionValidated}>
+                    helperTextInvalid={descriptionInvalidText}
+                    isRequired={false}
+                    fieldId="create-instance-description"
+                    validated={descriptionValidated}>
                     <TextArea
                         id="create-instance-description"
                         name="create-instance-description"
                         aria-describedby="create-instance-description-helper"
                         value={description}
-                        onChange={(value) => {setDescription(value)}}
+                        onChange={(value) => {setDescription(value);}}
                     />
                 </FormGroup>
             </Form>
