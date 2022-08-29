@@ -55,7 +55,7 @@ export const InstancesPage: FunctionComponent<InstancesPageProps> = ({}: Instanc
             refresh();
         }).catch(error => {
             console.error("Error creating registry: ", error);
-            setCreateError(`Error creating registry: ${error}`);
+            setCreateError(`Error creating registry: ${error.response?.data?.reason || error}`);
         });
     };
 
