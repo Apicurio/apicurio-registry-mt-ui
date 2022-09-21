@@ -30,6 +30,7 @@ jobs:
 
       - name: Build
         run: |
+          echo ${{ github.event_name }}
           ./prod-build.sh
 
       - name: Push container image
