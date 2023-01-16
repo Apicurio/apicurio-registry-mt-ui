@@ -1,6 +1,8 @@
 #!/bin/sh
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+BRANCH=${1:-main}
+FORK=${2:-Apicurio}
 
 echo "yarn install"
 echo "------------"
@@ -25,7 +27,7 @@ mkdir .work
 
   echo "Checkout apicurio-registry"
   echo "--------------------------"
-  git clone --depth 1 --single-branch https://github.com/Apicurio/apicurio-registry.git
+  git clone --depth 1 --single-branch --branch ${BRANCH} https://github.com/${FORK}/apicurio-registry.git
 
   (
     cd apicurio-registry/ui
